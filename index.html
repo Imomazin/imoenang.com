@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dr Imo Enang | Academic Leader, Author, Consultant & CEO of VLV</title>
+  <title>Dr Imo Enang | Academic Leader, Strategy Scholar, Author & CEO of VLV</title>
   <meta name="description" content="Official website of Dr Imo Enang (Imowo John Enang), academic leader, strategy scholar, author, global consultant and CEO of VivaLaVida (VLV).">
   <meta name="author" content="Dr Imo Enang">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
@@ -13,13 +13,17 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="Dr Imo Enang | Academic Leader, Author, Consultant & CEO of VLV">
+  <meta property="og:site_name" content="Dr Imo Enang">
+  <meta property="og:title" content="Dr Imo Enang | Academic Leader, Strategy Scholar, Author & CEO of VLV">
   <meta property="og:description" content="Official website of Dr Imo Enang (Imowo John Enang), connecting his academic, publishing, consulting and entrepreneurial work.">
   <meta property="og:url" content="https://imoenang.com/">
   <meta property="og:image" content="https://www.gre.ac.uk/__data/assets/image/0025/415456/imo-enang.jpg">
   <meta property="profile:first_name" content="Imo">
   <meta property="profile:last_name" content="Enang">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dr Imo Enang | Academic Leader, Strategy Scholar, Author & CEO of VLV">
+  <meta name="twitter:description" content="Official website of Dr Imo Enang (Imowo John Enang).">
+  <meta name="twitter:image" content="https://www.gre.ac.uk/__data/assets/image/0025/415456/imo-enang.jpg">
 
   <script type="application/ld+json">
   {
@@ -29,16 +33,23 @@
         "@type": "Person",
         "@id": "https://imoenang.com/#person",
         "name": "Imo Enang",
+        "givenName": "Imo",
+        "familyName": "Enang",
         "honorificPrefix": "Dr",
         "alternateName": ["Dr Imo Enang", "Imowo John Enang", "Imowo Enang"],
         "url": "https://imoenang.com/",
-        "image": "https://www.gre.ac.uk/__data/assets/image/0025/415456/imo-enang.jpg",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://www.gre.ac.uk/__data/assets/image/0025/415456/imo-enang.jpg",
+          "caption": "Dr Imo Enang"
+        },
         "description": "Academic leader, strategy scholar, author, global consultant and CEO of VivaLaVida (VLV).",
         "jobTitle": ["Academic Leader", "Strategy Scholar", "Author", "Global Consultant", "CEO of VivaLaVida (VLV)"],
         "identifier": {
           "@type": "PropertyValue",
           "propertyID": "ORCID",
-          "value": "0000-0003-1586-2175"
+          "value": "0000-0003-1586-2175",
+          "url": "https://orcid.org/0000-0003-1586-2175"
         },
         "sameAs": [
           "https://uk.linkedin.com/in/dr-imo-enang",
@@ -49,21 +60,16 @@
           "https://gala.gre.ac.uk/id/user/13303"
         ],
         "worksFor": [
-          {
-            "@type": "Organization",
-            "@id": "https://myvlv.com/#organization",
-            "name": "VivaLaVida",
-            "alternateName": "VLV",
-            "url": "https://myvlv.com/"
-          },
-          {
-            "@type": "CollegeOrUniversity",
-            "name": "University of Greenwich",
-            "url": "https://www.gre.ac.uk/"
-          }
+          {"@id": "https://imoenang.com/#vlv"},
+          {"@id": "https://imoenang.com/#greenwich"}
         ],
         "alumniOf": [
-          {"@type": "CollegeOrUniversity", "name": "University of Warwick", "url": "https://warwick.ac.uk/"},
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "Warwick Business School",
+            "url": "https://www.wbs.ac.uk/",
+            "parentOrganization": {"@type": "CollegeOrUniversity", "name": "University of Warwick", "url": "https://warwick.ac.uk/"}
+          },
           {"@type": "CollegeOrUniversity", "name": "IE Business School", "url": "https://www.ie.edu/business-school/"}
         ],
         "knowsAbout": [
@@ -82,6 +88,23 @@
           "MIPAD Global Top 100 Under 40 – Business & Entrepreneurship, 2023",
           "Brainz Global Award for Entrepreneurial Excellence"
         ],
+        "subjectOf": [
+          {
+            "@type": "ProfilePage",
+            "name": "University of Greenwich profile – Dr Imo Enang",
+            "url": "https://www.gre.ac.uk/people/rep/faculty-of-business/imo-enang"
+          },
+          {
+            "@type": "WebPage",
+            "name": "Meet Imo Enang – MIPAD",
+            "url": "https://blog.mipad.org/meet-imo-enang/"
+          },
+          {
+            "@type": "ProfilePage",
+            "name": "Imo Enang – Brainz Magazine Executive Contributor",
+            "url": "https://www.brainzmagazine.com/executive-contributor/imo-enang"
+          }
+        ],
         "mainEntityOfPage": {"@id": "https://imoenang.com/#profilepage"}
       },
       {
@@ -89,8 +112,11 @@
         "@id": "https://imoenang.com/#profilepage",
         "url": "https://imoenang.com/",
         "name": "Dr Imo Enang – Official Profile",
+        "description": "Official profile of Dr Imo Enang, also published as Imowo Enang and Imowo John Enang.",
+        "inLanguage": "en-GB",
         "mainEntity": {"@id": "https://imoenang.com/#person"},
         "isPartOf": {"@id": "https://imoenang.com/#website"},
+        "dateCreated": "2026-10-04",
         "dateModified": "2026-10-04"
       },
       {
@@ -98,7 +124,74 @@
         "@id": "https://imoenang.com/#website",
         "url": "https://imoenang.com/",
         "name": "Dr Imo Enang",
+        "alternateName": "Imo Enang Official Website",
+        "inLanguage": "en-GB",
         "publisher": {"@id": "https://imoenang.com/#person"}
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://imoenang.com/#vlv",
+        "name": "VivaLaVida",
+        "alternateName": "VLV",
+        "url": "https://myvlv.com/",
+        "description": "Connected business ecosystem spanning technology, practical capability and business visibility through Ambidexters, SkillHubs and ImpactCity."
+      },
+      {
+        "@type": "CollegeOrUniversity",
+        "@id": "https://imoenang.com/#greenwich",
+        "name": "University of Greenwich",
+        "url": "https://www.gre.ac.uk/"
+      },
+      {
+        "@type": "Book",
+        "@id": "https://imoenang.com/#book-ambidexterity",
+        "name": "Organisational Ambidexterity and Strategy: Design, Structure and Implementation",
+        "url": "https://www.routledge.com/Organisational-Ambidexterity-and-Strategy-Design-Structure-and-Implementation/Enang-Rudd/p/book/9781032785042",
+        "isbn": "9781032785042",
+        "author": [
+          {"@id": "https://imoenang.com/#person"},
+          {"@type": "Person", "name": "John M. Rudd"}
+        ],
+        "publisher": {"@type": "Organization", "name": "Routledge", "url": "https://www.routledge.com/"}
+      },
+      {
+        "@type": "ScholarlyArticle",
+        "@id": "https://doi.org/10.1108/SL-05-2026-0211",
+        "name": "Strategy in motion: an auditable decision architecture for strategic recalibration in volatile markets",
+        "url": "https://doi.org/10.1108/SL-05-2026-0211",
+        "author": {"@id": "https://imoenang.com/#person"},
+        "isPartOf": {"@type": "Periodical", "name": "Strategy & Leadership"},
+        "datePublished": "2026"
+      },
+      {
+        "@type": "ScholarlyArticle",
+        "@id": "https://doi.org/10.3390/systems14070837",
+        "name": "Cybersecurity Risk in Industrial Control Systems in Industry 4.0",
+        "url": "https://doi.org/10.3390/systems14070837",
+        "author": {"@id": "https://imoenang.com/#person"},
+        "isPartOf": {"@type": "Periodical", "name": "Systems"},
+        "datePublished": "2026"
+      },
+      {
+        "@type": "ScholarlyArticle",
+        "@id": "https://doi.org/10.3390/systems14030259",
+        "name": "Authentic Intelligence in Digital Strategy Systems: A Socio-Technical Analysis of Human-Accountable Decision Governance",
+        "url": "https://doi.org/10.3390/systems14030259",
+        "author": {"@id": "https://imoenang.com/#person"},
+        "isPartOf": {"@type": "Periodical", "name": "Systems"},
+        "datePublished": "2026"
+      },
+      {
+        "@type": "ScholarlyArticle",
+        "@id": "https://doi.org/10.1108/SL-05-2026-0225",
+        "name": "Fractional CEO architecture: executive bandwidth, strategic coherence and confidence in resource-constrained firms",
+        "url": "https://doi.org/10.1108/SL-05-2026-0225",
+        "author": [
+          {"@type": "Person", "name": "Nyasha Mapolisa"},
+          {"@id": "https://imoenang.com/#person"}
+        ],
+        "isPartOf": {"@type": "Periodical", "name": "Strategy & Leadership"},
+        "datePublished": "2026"
       }
     ]
   }
@@ -194,6 +287,11 @@
           <a href="https://doi.org/10.1108/SL-05-2026-0211" target="_blank" rel="noopener">DOI ↗</a>
         </article>
         <article>
+          <span>STRATEGY & LEADERSHIP · 2026</span>
+          <h3>Fractional CEO architecture: executive bandwidth, strategic coherence and confidence in resource-constrained firms</h3>
+          <a href="https://doi.org/10.1108/SL-05-2026-0225" target="_blank" rel="noopener">DOI ↗</a>
+        </article>
+        <article>
           <span>SYSTEMS · 2026</span>
           <h3>Cybersecurity Risk in Industrial Control Systems in Industry 4.0</h3>
           <a href="https://doi.org/10.3390/systems14070837" target="_blank" rel="noopener">DOI ↗</a>
@@ -229,7 +327,8 @@
         <a href="https://www.researchgate.net/profile/Imo-Enang" target="_blank" rel="me noopener"><span>ResearchGate</span><b>↗</b></a>
         <a href="https://www.gre.ac.uk/people/rep/faculty-of-business/imo-enang" target="_blank" rel="noopener"><span>University of Greenwich</span><b>↗</b></a>
         <a href="https://gala.gre.ac.uk/id/user/13303" target="_blank" rel="noopener"><span>Greenwich Academic Literature Archive</span><b>↗</b></a>
-        <a href="https://wrap.warwick.ac.uk/view/divisions/warwick%3D5Fbusiness%3D5Fschool/2024.creators_name.html" target="_blank" rel="noopener"><span>Warwick Research Archive</span><b>↗</b></a>
+        <a href="https://www.brainzmagazine.com/executive-contributor/imo-enang" target="_blank" rel="noopener"><span>Brainz Magazine</span><b>↗</b></a>
+        <a href="https://blog.mipad.org/meet-imo-enang/" target="_blank" rel="noopener"><span>MIPAD</span><b>↗</b></a>
         <a href="https://myvlv.com/" target="_blank" rel="noopener"><span>VivaLaVida · VLV</span><b>↗</b></a>
       </div>
     </section>
