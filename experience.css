@@ -122,3 +122,58 @@ background:#101312;color:#f7f6f2;color-scheme:dark}
 /* Heightened physicality without distorting real photographs */
 .xp-global-tour .xp-global-media{perspective:1600px}.xp-global-event,.xp-global-workshop,.xp-global-video{transform-style:preserve-3d;transition:transform .65s cubic-bezier(.16,1,.3,1),box-shadow .65s}.xp-global-event:hover,.xp-global-workshop:hover,.xp-global-video:hover{box-shadow:0 30px 65px rgba(0,0,0,.45)}.xp-global-event:focus-within,.xp-global-video:focus-within{outline:2px solid #c3a36a;outline-offset:4px}.xp-story-photo{isolation:isolate}.xp-story-photo img{object-fit:cover}.xp-personal-finale-grid .xp-story-photo{border:1px solid rgba(195,163,106,.2)}
 @media(prefers-reduced-motion:reduce){.xp-global-event,.xp-global-workshop,.xp-global-video{transition:none!important;transform:none!important}}
+
+/* Two complete identities: dark emerald and light ivory. No photographic filters. */
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=light] .experience{
+--xp-bg:#f7f6f2;--xp-fg:#14231b;--xp-muted:#526459;--xp-line:#d4dcd4;--xp-card:#eef1eb;--xp-gold:#8e6b32;--xp-inverse:#153d35;--xp-inverse-fg:#f7f6f2;--xp-emerald:#153d35;--xp-emerald-bright:#27775a;--xp-emerald-glow:#278460;
+color-scheme:light;color:#14231b;background:#f7f6f2}
+:root[data-theme=light] .xp-header{background:rgba(247,246,242,.94);border-color:#d9dfd7;box-shadow:0 6px 24px rgba(20,45,30,.07)}
+:root[data-theme=light] .xp-header.xp-header-scrolled{background:rgba(247,246,242,.98);box-shadow:0 12px 35px rgba(20,45,30,.12)}
+:root[data-theme=light] .xp-brand-copy,:root[data-theme=light] .xp-header a{color:#14231b}
+:root[data-theme=light] .xp-brand-copy small,:root[data-theme=light] .xp-edition{color:#526459}
+:root[data-theme=light] .xp-theme{background:#153d35;color:#fff;border-color:#153d35}
+:root[data-theme=light] .xp-menu{background:#153d35;color:#fff;border-color:#153d35}
+:root[data-theme=light] .xp-nav{background:#f7f6f2;color:#153d35}
+:root[data-theme=light] .xp-nav-inner a{color:#153d35;border-color:#d4dcd4}
+:root[data-theme=light] .xp-hero{background:radial-gradient(ellipse at 72% 43%,rgba(44,112,77,.17),transparent 55%),linear-gradient(120deg,#f7f6f2,#e8eee7 70%,#dce9dc)}
+:root[data-theme=light] .xp-hero:before{opacity:.18}
+:root[data-theme=light] .xp-hero:after{opacity:.22}
+:root[data-theme=light] .xp-hero h1{color:#14231b;text-shadow:none}
+:root[data-theme=light] .xp-hero h1 em,:root[data-theme=light] .xp-intro h2 em,:root[data-theme=light] .xp-feature h2 em,:root[data-theme=light] .xp-ventures h2 em,:root[data-theme=light] .xp-personal-finale h2 em{color:#8e6b32}
+:root[data-theme=light] .xp-hero-description{color:#465b4e}
+:root[data-theme=light] .xp-cta{background:#153d35;color:#fff;border-color:#153d35}
+:root[data-theme=light] .xp-cta:hover{background:#25694e;color:#fff}
+:root[data-theme=light] .xp-cta-quiet,:root[data-theme=light] .xp-text-link{color:#176144}
+:root[data-theme=light] .xp-marquee{background:#153d35;color:#fff}
+:root[data-theme=light] .xp-intro{background:linear-gradient(150deg,#f7f6f2,#eaf0e9)}
+:root[data-theme=light] .xp-global-tour{background:radial-gradient(ellipse at 80% 25%,rgba(35,110,78,.13),transparent 55%),linear-gradient(155deg,#f3f5ee,#e4ece3)}
+:root[data-theme=light] .xp-global-tour h2,:root[data-theme=light] .xp-global-tour p,:root[data-theme=light] .xp-global-tour h3{color:#14231b}
+:root[data-theme=light] .xp-global-video{background:#e4ebe4;border-color:#cad5c9}
+:root[data-theme=light] .xp-global-event,:root[data-theme=light] .xp-global-workshop{border-color:#cbd7c9}
+:root[data-theme=light] .xp-ecosystem{background:radial-gradient(circle at 50% 50%,#d9e9db,#f7f6f2 67%)}
+:root[data-theme=light] .xp-orbit-core{background:#153d35;color:#fff;border-color:#a58a53}
+:root[data-theme=light] .xp-orbit-node{background:#e8efe7;color:#14231b;border-color:#9fb9a5}
+:root[data-theme=light] .xp-orbit-node:hover{background:#d5e6d7}
+:root[data-theme=light] .xp-feature{background:#f7f6f2}
+:root[data-theme=light] .xp-manifesto{background:#153d35;color:#fff}
+:root[data-theme=light] .xp-ventures{background:linear-gradient(160deg,#f1f3ee,#e5eee5)}
+:root[data-theme=light] .xp-venture-list a{border-color:#c4d3c6;color:#153d35}
+:root[data-theme=light] .xp-venture-list a:hover{background:#dce9dd}
+:root[data-theme=light] .xp-credentials{background:#f7f6f2}
+:root[data-theme=light] .xp-personal-finale{background:linear-gradient(165deg,#f7f6f2,#e6eee7)}
+:root[data-theme=light] .xp-connect{background:#153d35;color:#fff}
+:root[data-theme=light] .xp-footer{background:#e6ece5;color:#153d35;border-color:#d4dcd4}
+:root[data-theme=light] .xp-inner{background:#f7f6f2;color:#14231b}
+:root[data-theme=light] .xp-inner main{background:linear-gradient(160deg,#f7f6f2,#e8efe7 65%,#f7f6f2)}
+:root[data-theme=light] .xp-inner main h1,:root[data-theme=light] .xp-inner main h2{color:#14231b}
+:root[data-theme=light] .xp-inner main section{border-color:#d4dcd4}
+:root[data-theme=light] .xp-inner main a:hover{color:#176144}
+:root[data-theme=light] .xp-progress span{background:linear-gradient(90deg,#153d35,#278460,#b0925c)}
+:root[data-theme=light] .xp-scene-index{color:#176144}
+:root[data-theme=light] .xp-hero-canvas{opacity:.4}
+:root[data-theme=light] .xp-page-transition{background:#153d35;color:#f7f6f2}
+:root[data-theme=light] .xp-hero-visual .xp-image{background:#e6ece5}
+:root[data-theme=light] .xp-cinema{background:#153d35}
+:root[data-theme=light] .xp-cinema-shutter{background:#e5eee6}
+:root[data-theme=light] .xp-hero-visual img,:root[data-theme=light] .xp-global-event img,:root[data-theme=light] .xp-global-workshop img,:root[data-theme=light] .xp-story-photo img{filter:none!important;opacity:1!important}
