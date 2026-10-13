@@ -177,3 +177,7 @@ color-scheme:light;color:#14231b;background:#f7f6f2}
 :root[data-theme=light] .xp-cinema{background:#153d35}
 :root[data-theme=light] .xp-cinema-shutter{background:#e5eee6}
 :root[data-theme=light] .xp-hero-visual img,:root[data-theme=light] .xp-global-event img,:root[data-theme=light] .xp-global-workshop img,:root[data-theme=light] .xp-story-photo img{filter:none!important;opacity:1!important}
+
+/* Final photography safeguard — all images remain in their original colour */
+.experience img,.experience picture img,.experience figure img,.experience a img,.experience img:hover,.experience figure:hover img{filter:none!important;-webkit-filter:none!important;mix-blend-mode:normal!important;opacity:1!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.experience .xp-hero-visual .xp-image::before,.experience .xp-hero-visual .xp-image::after,.experience .xp-story-photo::before,.experience .xp-story-photo::after,.experience .xp-global-event::before,.experience .xp-global-event::after,.experience .xp-global-workshop::before,.experience .xp-global-workshop::after{background-image:none!important;box-shadow:none!important;pointer-events:none!important}
