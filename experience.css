@@ -62,3 +62,6 @@
 
 /* Executive classroom photographs: paired at their original proportions. */
 .xp-executive-grid{align-items:flex-start}.xp-executive-grid figure{flex:0 0 calc((100% - 28px)/2)}.xp-executive-grid .xp-photo-open{display:block}.xp-executive-grid .xp-photo-open img{display:block;width:100%;height:auto;max-height:none;min-height:0;margin:0;object-fit:contain}.xp-executive-grid .xp-photo-open span{width:100%;box-sizing:border-box}@media(max-width:700px){.xp-executive-grid{gap:18px}.xp-executive-grid figure{flex-basis:100%}}
+
+/* Show complete engagement photographs in naturally sized frames. */
+.xp-engagement-open .xp-engagement-image{display:block;aspect-ratio:auto;height:auto;max-height:none;overflow:visible}.xp-engagement-open .xp-engagement-image img{display:block;width:100%;height:auto;max-width:100%;max-height:none;object-fit:contain;margin:0}.xp-engagement-grid{align-items:start}.xp-photo-open{overflow:visible}.xp-photo-open img{object-fit:contain;clip-path:none;border-radius:0}
