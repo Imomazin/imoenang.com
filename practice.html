@@ -81,6 +81,35 @@
 
 /* Proportional paired columns: photographs fill their cards without cropping. */
 .xp-engagement-grid{display:flex;flex-wrap:wrap;gap:40px 24px;align-items:flex-start}.xp-engagement-grid>.xp-engagement-card{flex:0 0 auto;min-width:0}.xp-engagement-grid>.xp-engagement-card:nth-child(1){width:calc((100% - 24px)*0.6210437287732421)}.xp-engagement-grid>.xp-engagement-card:nth-child(2){width:calc((100% - 24px)*0.37895627122675796)}.xp-engagement-grid>.xp-engagement-card:nth-child(3){width:calc((100% - 24px)*0.49710790051519527)}.xp-engagement-grid>.xp-engagement-card:nth-child(4){width:calc((100% - 24px)*0.5028920994848047)}.xp-engagement-open .xp-engagement-image{width:100%;height:auto}.xp-engagement-open .xp-engagement-image img{width:100%;height:auto;max-height:none;margin:0}.xp-engagement-open .xp-engagement-title{font-size:clamp(24px,2.15vw,36px)}.xp-engagement-open .xp-engagement-description{max-width:70ch}.xp-executive-grid .xp-photo-open img{width:100%;height:auto;max-height:none}.xp-personal-finale-grid{display:flex;flex-wrap:wrap;gap:36px 24px}.xp-personal-finale-grid .xp-story-photo{flex:0 0 auto;width:calc((100% - 24px)*.4285714286);margin:0}.xp-personal-finale-grid .xp-story-photo:nth-child(even){width:calc((100% - 24px)*.5714285714)}.xp-personal-finale-grid .xp-story-photo img{width:100%;height:auto;max-height:none}.xp-personal-finale-grid .xp-story-photo:last-child:nth-child(odd){width:100%;max-width:1000px}@media(max-width:700px){.xp-engagement-grid{gap:36px}.xp-engagement-grid>.xp-engagement-card:nth-child(n){width:100%}.xp-engagement-open .xp-engagement-image img,.xp-executive-grid .xp-photo-open img{width:100%;height:auto}}@media(max-width:600px){.xp-personal-finale-grid .xp-story-photo:nth-child(n){width:100%}.xp-personal-finale-grid .xp-story-photo img{width:100%;height:auto}}
+
+/* Imomazin entrance: a deliberate flight through a dimensional brand tunnel. */
+.xp-cinema{perspective:700px;background:#06120e;isolation:isolate;transition:none;clip-path:none;visibility:visible;padding:24px}
+.xp-cinema-inner{width:min(100%,1100px);transform-origin:50% 43%;will-change:transform,opacity}
+.xp-entry-logo{width:clamp(280px,44vw,600px);max-height:none;height:auto;margin:0 auto 18px;animation:xp-brand-breathe 7s ease-in-out infinite;transform-origin:center}
+.xp-cinema-word{font-size:clamp(48px,7vw,102px);line-height:1.02}
+.xp-cinema-index{margin-bottom:18px}.xp-entry-copy{margin:20px auto 26px}.xp-enter{position:relative;z-index:4}
+.xp-entry-tunnel{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 43%,#164e3b 0%,#09291e 28%,#06120e 64%)}
+.xp-tunnel-rings{position:absolute;inset:0;perspective:650px;perspective-origin:50% 43%;transform-style:preserve-3d}
+.xp-tunnel-ring{position:absolute;left:50%;top:43%;width:min(85vw,1100px);aspect-ratio:1.3;border:2px solid #bda16c99;border-radius:32%;transform:translate(-50%,-50%) translateZ(var(--depth)) rotate(var(--ring-turn));box-shadow:0 0 20px #bda16c14,inset 0 0 24px #11754d33;backface-visibility:hidden}
+.xp-tunnel-ring:nth-child(even){border-color:#26866b99;border-radius:42%}.xp-tunnel-ring:nth-child(3n){border-style:dashed;border-color:#bda16c66}
+.xp-tunnel-vanishing{position:absolute;width:7px;height:7px;border-radius:50%;left:50%;top:43%;background:#c3a36a;box-shadow:0 0 65px 18px #2d8d6444}
+.xp-entry-orbit{z-index:1;opacity:.45}
+.xp-cinema.entered{visibility:visible;clip-path:none;animation:xp-tunnel-depart 2.3s linear both;pointer-events:none}
+.xp-cinema.entered .xp-cinema-inner{animation:xp-tunnel-brand-flight 1.65s cubic-bezier(.55,.05,.8,.3) both}
+.xp-cinema.entered .xp-entry-logo{animation:xp-logo-launch 1.4s cubic-bezier(.55,.05,.8,.3) both}
+.xp-cinema.entered .xp-tunnel-ring{will-change:transform,opacity;animation:xp-ring-flight 2.3s cubic-bezier(.5,.05,.65,.65) both}
+.xp-cinema.entered .xp-entry-orbit{animation:xp-orbit-launch 1.7s ease-in both}
+.xp-cinema.entered .xp-tunnel-vanishing{animation:xp-vanishing-flight 2.3s ease-in both}
+@keyframes xp-brand-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.065)}}
+@keyframes xp-logo-launch{from{transform:scale(1)}to{transform:scale(1.65)}}
+@keyframes xp-tunnel-brand-flight{0%{transform:scale(1);opacity:1}30%{opacity:1}100%{transform:scale(9);opacity:0}}
+@keyframes xp-ring-flight{0%{transform:translate(-50%,-50%) translateZ(var(--depth)) rotate(var(--ring-turn));opacity:.4}25%{opacity:.9}85%{opacity:.85}100%{transform:translate(-50%,-50%) translateZ(calc(var(--depth) + 3100px)) rotate(calc(var(--ring-turn) + 24deg));opacity:0}}
+@keyframes xp-tunnel-depart{0%,70%{opacity:1}100%{opacity:0}}
+@keyframes xp-orbit-launch{to{scale:5;opacity:0}}
+@keyframes xp-vanishing-flight{0%,45%{transform:scale(1);opacity:.6}100%{transform:scale(45);opacity:0}}
+@media(max-width:700px){.xp-entry-logo{width:clamp(230px,74vw,360px);margin-bottom:16px}.xp-cinema-word{font-size:clamp(44px,11vw,70px)}.xp-cinema-index{font-size:9px;letter-spacing:.18em}.xp-entry-copy{font-size:15px;max-width:32ch;margin:18px auto 24px}.xp-tunnel-ring{width:110vw;aspect-ratio:.85;border-radius:30%}.xp-cinema{padding:22px}.xp-tunnel-rings{perspective:450px}}
+@media(max-height:650px){.xp-entry-logo{width:min(35vw,260px)}.xp-cinema-word{font-size:clamp(32px,6vw,64px)}.xp-cinema-index{margin-bottom:10px}.xp-entry-copy{font-size:14px;margin:12px auto 18px}.xp-cinema{padding:16px}}
+@media(prefers-reduced-motion:reduce){.xp-entry-logo,.xp-tunnel-ring{animation:none!important}.xp-cinema.entered{animation:none!important}}
 </style><title>Global Consulting &amp; Executive Education | Dr Imo Enang</title>
   <meta name="description" content="International consulting and executive education across strategy, leadership, transformation and project management, led by Dr Imo Enang.">
   <meta name="robots" content="index,follow,max-image-preview:large">
