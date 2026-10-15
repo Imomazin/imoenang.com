@@ -6,7 +6,7 @@ const canvas=document.createElement('canvas');canvas.className='xp-flight-canvas
 const skip=document.createElement('button');skip.type='button';skip.className='xp-flight-skip';skip.textContent='SKIP JOURNEY ↗';intro.append(skip);
 const body=document.body,root=document.documentElement;let render,dispose=()=>{};
 const path=z=>[1.6*Math.sin(z*.047),.8*Math.sin(z*.071)];
-function finish(){if(ended)return;ended=true;cancelAnimationFrame(frame);removeEventListener('resize',resize);document.removeEventListener('keydown',key);document.removeEventListener('visibilitychange',visibility);skip.removeEventListener('click',finish);dispose();body.classList.remove('xp-flight-active');body.style.removeProperty('--flight-scale');body.style.removeProperty('--flight-lift');body.style.removeProperty('--flight-reveal');complete()}
+function finish(){if(ended)return;ended=true;cancelAnimationFrame(frame);removeEventListener('resize',resize);document.removeEventListener('keydown',key);document.removeEventListener('visibilitychange',visibility);skip.removeEventListener('click',finish);dispose();body.classList.remove('xp-flight-active');body.style.removeProperty('--flight-scale');body.style.removeProperty('--flight-lift');body.style.removeProperty('--flight-reveal');body.style.removeProperty('--flight-header-height');complete()}
 const key=e=>{if(e.key==='Escape'){e.preventDefault();finish()}else if(e.key==='Tab'){e.preventDefault();skip.focus({preventScroll:true})}};
 const visibility=()=>{if(document.hidden)finish()};
 skip.addEventListener('click',finish);document.addEventListener('keydown',key);document.addEventListener('visibilitychange',visibility);
@@ -34,8 +34,8 @@ try{
  for(let z=Math.ceil(near/3)*3;z<180;z+=3){ctx.beginPath();for(let j=0;j<=32;j++){const pt=point(z,j*Math.PI/16);if(j===0)ctx.moveTo(...pt);else ctx.lineTo(...pt)}ctx.strokeStyle='rgba(190,159,100,'+Math.max(.08,.7-(z-camera)/230)+')';ctx.lineWidth=Math.max(1,8/(z-camera));ctx.stroke()}
  };
 }
-body.classList.add('xp-flight-active');intro.classList.add('xp-flight-running');intro.setAttribute('aria-busy','true');skip.focus({preventScroll:true});
-function tick(now){if(ended)return;const t=Math.min(1,(now-start)/5000),smooth=t*t*(3-2*t),p=.35*t+.65*smooth;const arrival=Math.max(0,(t-.42)/.58),scale=.1+.9*arrival*arrival;body.style.setProperty('--flight-scale',String(scale));body.style.setProperty('--flight-lift',((1-scale)*42)+'vh');body.style.setProperty('--flight-reveal',String(Math.max(0,(t-.86)/.14)));render(p);if(t>=1){finish();return}frame=requestAnimationFrame(tick)}frame=requestAnimationFrame(tick);
+body.style.setProperty('--flight-header-height',(document.querySelector('.xp-header')?.getBoundingClientRect().height||104)+'px');body.classList.add('xp-flight-active');intro.classList.add('xp-flight-running');intro.setAttribute('aria-busy','true');skip.focus({preventScroll:true});
+function tick(now){if(ended)return;const t=Math.min(1,(now-start)/5000),smooth=t*t*(3-2*t),p=.35*t+.65*smooth;const arrival=Math.max(0,(t-.42)/.58),scale=.1+.9*arrival*arrival;body.style.setProperty('--flight-scale',String(scale));body.style.setProperty('--flight-lift',((1-scale)*50)+'vh');body.style.setProperty('--flight-reveal',String(Math.max(0,(t-.86)/.14)));render(p);if(t>=1){finish();return}frame=requestAnimationFrame(tick)}frame=requestAnimationFrame(tick);
 return finish;
 };
 })();
