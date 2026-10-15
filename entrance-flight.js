@@ -1,0 +1,36 @@
+/* Five-second entrance flight. Original photographs remain untouched. */
+(()=>{'use strict';
+window.imoEntranceFlight=({intro,complete})=>{
+let ended=false,frame=0,start=performance.now();
+const canvas=document.createElement('canvas');canvas.className='xp-flight-canvas';canvas.setAttribute('aria-hidden','true');intro.prepend(canvas);
+const skip=document.createElement('button');skip.type='button';skip.className='xp-flight-skip';skip.textContent='SKIP JOURNEY ↗';intro.append(skip);
+const body=document.body,root=document.documentElement;let render,dispose=()=>{};
+const path=z=>[1.6*Math.sin(z*.047),.8*Math.sin(z*.071)];
+function finish(){if(ended)return;ended=true;cancelAnimationFrame(frame);removeEventListener('resize',resize);document.removeEventListener('keydown',key);document.removeEventListener('visibilitychange',visibility);skip.removeEventListener('click',finish);dispose();body.classList.remove('xp-flight-active');body.style.removeProperty('--flight-scale');body.style.removeProperty('--flight-lift');body.style.removeProperty('--flight-reveal');complete()}
+const key=e=>{if(e.key==='Escape'){e.preventDefault();finish()}else if(e.key==='Tab'){e.preventDefault();skip.focus({preventScroll:true})}};
+const visibility=()=>{if(document.hidden)finish()};
+skip.addEventListener('click',finish);document.addEventListener('keydown',key);document.addEventListener('visibilitychange',visibility);
+function resize(){const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr)}
+resize();addEventListener('resize',resize,{passive:true});
+try{
+ const gl=canvas.getContext('webgl',{alpha:true,antialias:true,powerPreference:'low-power',premultipliedAlpha:false});if(!gl)throw Error('WebGL unavailable');
+ const vert='attribute vec3 aPosition;attribute float aAngle;uniform float uCamera;uniform float uAspect;varying vec3 vPosition;varying float vAngle;varying float vDistance;vec2 path(float z){return vec2(1.6*sin(z*.047),.8*sin(z*.071));}void main(){vec3 camera=vec3(path(uCamera),uCamera);vec3 forward=normalize(vec3(path(uCamera+1.)-path(uCamera),1.));vec3 right=normalize(cross(vec3(0.,1.,0.),forward));vec3 up=cross(forward,right);vec3 delta=aPosition-camera;vec3 p=vec3(dot(delta,right),dot(delta,up),dot(delta,forward));float roll=.035*sin(uCamera*.04);p.xy=mat2(cos(roll),-sin(roll),sin(roll),cos(roll))*p.xy;float near=.08;float far=220.;gl_Position=vec4(p.x/(uAspect*.82),p.y/.82,((far+near)/(far-near))*p.z-2.*far*near/(far-near),p.z);vPosition=aPosition;vAngle=aAngle;vDistance=length(delta);}';
+ const frag='precision mediump float;varying vec3 vPosition;varying float vAngle;varying float vDistance;void main(){float rib=1.-smoothstep(.025,.09,abs(fract(vPosition.z/3.)-.5));float seam=1.-smoothstep(.008,.028,min(fract(vAngle*12.),1.-fract(vAngle*12.)));float light=.48+.52*pow(max(0.,sin(vAngle*6.28318+.6)),2.);vec3 emerald=mix(vec3(.012,.035,.026),vec3(.035,.19,.13),light);vec3 gold=vec3(.68,.53,.29);vec3 color=mix(emerald,gold,max(rib*.88,seam*.45));float haze=exp(-vDistance*.017);color=mix(vec3(.018,.065,.045),color,haze);float alpha=1.-smoothstep(120.,210.,vDistance);gl_FragColor=vec4(color,alpha);}';
+ const shader=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error('Entrance shader failed');return s};
+ const vs=shader(gl.VERTEX_SHADER,vert),fs=shader(gl.FRAGMENT_SHADER,frag),program=gl.createProgram();gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error('Entrance link failed');
+ const data=[],sides=24,steps=144,length=180;function vertex(i,j){const z=i*length/steps,a=j/sides*Math.PI*2,c=path(z),radius=3.1+.15*Math.sin(z*.13);data.push(c[0]+radius*Math.cos(a),c[1]+radius*Math.sin(a),z,j/sides)}
+ for(let i=0;i<steps;i++)for(let j=0;j<sides;j++){vertex(i,j);vertex(i+1,j);vertex(i+1,j+1);vertex(i,j);vertex(i+1,j+1);vertex(i,j+1)}
+ const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW);gl.useProgram(program);
+ const position=gl.getAttribLocation(program,'aPosition'),angle=gl.getAttribLocation(program,'aAngle');gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,3,gl.FLOAT,false,16,0);gl.enableVertexAttribArray(angle);gl.vertexAttribPointer(angle,1,gl.FLOAT,false,16,12);
+ const camera=gl.getUniformLocation(program,'uCamera'),aspect=gl.getUniformLocation(program,'uAspect');gl.enable(gl.DEPTH_TEST);gl.clearColor(0,0,0,0);
+ render=p=>{gl.viewport(0,0,canvas.width,canvas.height);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniform1f(camera,-5+p*191);gl.uniform1f(aspect,canvas.width/canvas.height);gl.drawArrays(gl.TRIANGLES,0,data.length/4)};
+ dispose=()=>{gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.deleteShader(vs);gl.deleteShader(fs)};
+ canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();finish()},{once:true});
+}catch{
+ canvas.remove();const fallback=document.createElement('div');fallback.className='xp-flight-fallback';fallback.setAttribute('aria-hidden','true');for(let i=0;i<24;i++){const ring=document.createElement('i');ring.style.setProperty('--flight-depth',(-3600+i*140)+'px');fallback.append(ring)}intro.prepend(fallback);render=()=>{};
+}
+body.classList.add('xp-flight-active');intro.classList.add('xp-flight-running');intro.setAttribute('aria-busy','true');skip.focus({preventScroll:true});
+function tick(now){if(ended)return;const t=Math.min(1,(now-start)/5000),smooth=t*t*(3-2*t),p=.35*t+.65*smooth;const arrival=Math.max(0,(t-.42)/.58),scale=.1+.9*arrival*arrival;body.style.setProperty('--flight-scale',String(scale));body.style.setProperty('--flight-lift',((1-scale)*42)+'vh');body.style.setProperty('--flight-reveal',String(Math.max(0,(t-.86)/.14)));render(p);if(t>=1){finish();return}frame=requestAnimationFrame(tick)}frame=requestAnimationFrame(tick);
+return finish;
+};
+})();
