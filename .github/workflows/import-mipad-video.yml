@@ -24,7 +24,7 @@ jobs:
           set -euo pipefail
           mkdir -p assets
           url='https://uplandartsdevelopmentcic292-my.sharepoint.com/:v:/g/personal/imo_weareupland_com/IQB3uZ8OHMesQrd7XlYQfJaEAXAdJSLNY6od0XfsnaDZoqk?download=1'
-          curl -L --fail --retry 3 --retry-all-errors "$url" -o assets/mipad-2023-panel-video.mp4
+          curl -L --fail --retry 3 --retry-all-errors -A 'Mozilla/5.0' -c /tmp/sp-cookies -b /tmp/sp-cookies "$url" -o assets/mipad-2023-panel-video.mp4
           test "$(stat -c%s assets/mipad-2023-panel-video.mp4)" -gt 1000000
           head -c 32 assets/mipad-2023-panel-video.mp4 | grep -a -q 'ftyp'
 
