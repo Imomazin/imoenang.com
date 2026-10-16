@@ -1,0 +1,42 @@
+name: Import MIPAD video asset
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-mipad-video.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import-video:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download MIPAD 2023 panel film
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          url='https://uplandartsdevelopmentcic292-my.sharepoint.com/:v:/g/personal/imo_weareupland_com/IQB3uZ8OHMesQrd7XlYQfJaEAXAdJSLNY6od0XfsnaDZoqk?download=1'
+          curl -L --fail --retry 3 --retry-all-errors "$url" -o assets/mipad-2023-panel-video.mp4
+          test "$(stat -c%s assets/mipad-2023-panel-video.mp4)" -gt 1000000
+          head -c 32 assets/mipad-2023-panel-video.mp4 | grep -a -q 'ftyp'
+
+      - name: Commit video asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Imo Enang Site Update'
+          git config user.email 'actions@users.noreply.github.com'
+          git add assets/mipad-2023-panel-video.mp4
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'Add MIPAD 2023 panel video asset'
+          git push origin HEAD:main
