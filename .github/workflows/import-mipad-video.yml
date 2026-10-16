@@ -1,4 +1,4 @@
-name: Import MIPAD video asset
+name: Place MIPAD video on homepage
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  import-video:
+  update-homepage:
     runs-on: ubuntu-latest
     steps:
       - name: Check out site
@@ -18,25 +18,53 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download MIPAD 2023 panel film
+      - name: Put MIPAD film first in Global Leadership gallery
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p assets
-          url='https://uplandartsdevelopmentcic292-my.sharepoint.com/:v:/g/personal/imo_weareupland_com/IQB3uZ8OHMesQrd7XlYQfJaEAXAdJSLNY6od0XfsnaDZoqk?download=1'
-          curl -L --fail --retry 3 --retry-all-errors -A 'Mozilla/5.0' -c /tmp/sp-cookies -b /tmp/sp-cookies "$url" -o assets/mipad-2023-panel-video.mp4
-          test "$(stat -c%s assets/mipad-2023-panel-video.mp4)" -gt 1000000
-          head -c 32 assets/mipad-2023-panel-video.mp4 | grep -a -q 'ftyp'
+          python - <<'PY'
+          from pathlib import Path
 
-      - name: Commit video asset
+          page_path = Path('index.html')
+          page = page_path.read_text(encoding='utf-8')
+          rail_open = '<div class="xp-gallery-rail" tabindex="0" role="region" aria-label="MIPAD 2023 and Middle East executive education gallery">'
+          if 'id="xp-mipad-video"' not in page:
+              start = page.index(rail_open) + len(rail_open)
+              end = page.index('</div><p class="xp-gallery-hint">', start)
+              slides = '''<figure class="xp-gallery-slide xp-gallery-video"><div class="xp-global-video"><div class="xp-global-video-head"><span>01 / MIPAD 2023</span><strong>GLOBAL LEADERSHIP IN CONVERSATION</strong></div><div class="xp-global-video-frame"><video id="xp-mipad-video" controls playsinline preload="metadata" poster="/assets/mipad-2023-panel.jpg" aria-label="Most Influential People of African Descent Recognition Week 2023 panel discussion in New York"></video><button type="button" id="xp-mipad-play" class="xp-tour-play" aria-controls="xp-mipad-video"><span aria-hidden="true">▶</span><strong>WATCH THE MIPAD PANEL</strong><small>2 MIN 30 SEC · NEW YORK · 2023</small></button><p class="xp-video-status" id="xp-mipad-status" aria-live="polite"></p></div></div><figcaption>01 / MIPAD RECOGNITION WEEK 2023 · GLOBAL LEADERSHIP PANEL · NEW YORK</figcaption></figure><figure class="xp-gallery-slide" style="--photo-width:calc(var(--xp-gallery-photo-height) * 1105 / 489)"><button class="xp-photo-open" type="button" aria-label="View photograph: Most Influential People of African Descent [MIPAD] Recognition Week 2023 panel discussion in New York"><img src="/assets/mipad-2023-panel.jpg" alt="Panel discussion at Most Influential People of African Descent [MIPAD] Recognition Week 2023 in New York" loading="lazy" width="1105" height="489" decoding="async"></button><figcaption>02 / MOST INFLUENTIAL PEOPLE OF AFRICAN DESCENT [MIPAD] RECOGNITION WEEK 2023 · PANEL DISCUSSION · NEW YORK</figcaption></figure><figure class="xp-gallery-slide" style="--photo-width:calc(var(--xp-gallery-photo-height) * 1280 / 960)"><button class="xp-photo-open" type="button" aria-label="Enlarge Dr Imo Enang at an executive education engagement in Saudi Arabia"><img src="/assets/saudi-executive-partnership.jpg" alt="Executive education engagement with senior leaders in Saudi Arabia" loading="lazy" width="1280" height="960" decoding="async"></button><figcaption>03 / EXECUTIVE LEADERSHIP DEVELOPMENT · SAUDI ARABIA</figcaption></figure><figure class="xp-gallery-slide" style="--photo-width:calc(var(--xp-gallery-photo-height) * 768 / 492)"><button class="xp-photo-open" type="button" aria-label="Enlarge Dr Imo Enang with Saudi executive education partners"><img src="/assets/saudi-executive-education.png" alt="Executive leadership development and professional learning in Saudi Arabia" loading="lazy" width="768" height="492" decoding="async"></button><figcaption>04 / EXECUTIVE EDUCATION ENGAGEMENT · SAUDI ARABIA</figcaption></figure><figure class="xp-gallery-slide" style="--photo-width:calc(var(--xp-gallery-photo-height) * 767 / 522)"><button class="xp-photo-open" type="button" aria-label="Enlarge Dr Imo Enang with the Saudi executive delegation"><img src="/assets/saudi-executive-engagement.png" alt="Dr Imo Enang with the Saudi executive delegation" loading="lazy" width="767" height="522" decoding="async"></button><figcaption>05 / INTERNATIONAL EXECUTIVE ENGAGEMENT · SAUDI ARABIA</figcaption></figure><figure class="xp-gallery-slide xp-gallery-video"><div class="xp-global-video"><div class="xp-global-video-head"><span>06 / IN THE ROOM</span><strong>EXECUTIVE LEARNING IN ACTION</strong></div><div class="xp-global-video-frame"><video id="xp-tour-video" controls playsinline preload="none" aria-label="Dr Imo Enang delivering an executive training session"></video><button type="button" id="xp-tour-play" class="xp-tour-play" aria-controls="xp-tour-video"><span aria-hidden="true">▶</span><strong>WATCH THE SESSION</strong><small>11 SECONDS · EXECUTIVE EDUCATION</small></button><p class="xp-video-status" id="xp-video-status" aria-live="polite"></p></div></div><figcaption>06 / WATCH THE EXECUTIVE SESSION</figcaption></figure>'''
+              page = page[:start] + slides + page[end:]
+              old_count = '<span class="xp-gallery-count" aria-live="polite">01 / 05</span>'
+              if old_count not in page:
+                  raise SystemExit('Gallery count marker not found')
+              page = page.replace(old_count, '<span class="xp-gallery-count" aria-live="polite">01 / 06</span>', 1)
+              page_path.write_text(page, encoding='utf-8')
+
+          js_path = Path('experience.js')
+          js = js_path.read_text(encoding='utf-8')
+          old_pause = "const vid=q('video',rail);if(vid&&cards[i]!==vid.closest('.xp-gallery-slide'))vid.pause()"
+          new_pause = "qa('video',rail).forEach(vid=>{if(cards[i]!==vid.closest('.xp-gallery-slide'))vid.pause()})"
+          if old_pause in js:
+              js = js.replace(old_pause, new_pause, 1)
+
+          if "setupFeatureVideo('#xp-mipad-video'" not in js:
+              video_start = "const video=q('#xp-tour-video'),play=q('#xp-tour-play'),status=q('#xp-video-status');"
+              marker = '\n// One scheduled scroll update owns the page progress, spatial connectors and chapter motion.'
+              start = js.index(video_start)
+              end = js.index(marker, start)
+              video_block = "function setupFeatureVideo(videoSelector,playSelector,statusSelector,src){const video=q(videoSelector),play=q(playSelector),status=q(statusSelector);if(!video)return;video.src=src;video.preload='metadata';play?.addEventListener('click',async()=>{play.disabled=true;try{await video.play();play.hidden=true;if(status)status.textContent=''}catch{if(status)status.textContent='Use the video controls to begin playback.';play.hidden=true}finally{play.disabled=false}});video.addEventListener('play',()=>{if(play)play.hidden=true;if(status)status.textContent=''});video.addEventListener('error',()=>{if(status)status.textContent='The video could not load. Please refresh to retry.';if(play)play.hidden=true})}setupFeatureVideo('#xp-mipad-video','#xp-mipad-play','#xp-mipad-status','/assets/mipad-2023-panel-video.mp4');setupFeatureVideo('#xp-tour-video','#xp-tour-play','#xp-video-status','/assets/executive-session.mp4');"
+              js = js[:start] + video_block + js[end:]
+              js_path.write_text(js, encoding='utf-8')
+          PY
+
+      - name: Commit homepage update
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'Imo Enang Site Update'
           git config user.email 'actions@users.noreply.github.com'
-          git add assets/mipad-2023-panel-video.mp4
+          git add index.html experience.js
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m 'Add MIPAD 2023 panel video asset'
+          git commit -m 'Feature MIPAD 2023 video in global leadership gallery'
           git push origin HEAD:main
