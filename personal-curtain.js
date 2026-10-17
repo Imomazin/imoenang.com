@@ -18,7 +18,7 @@
     gallery.innerHTML=`
       <div class="xp-curtain-stage xp-carousel-stage">
         <div class="xp-carousel-track">
-          ${slides.map((s,i)=>`<figure class="xp-curtain-slide xp-carousel-slide ${s.cls}" data-index="${i}"><img src="${s.src}" alt="Dr Imo Enang personal portrait ${i+1}" ${i===0?'fetchpriority="high"':'loading="lazy"'} decoding="async"><figcaption class="xp-curtain-caption">${s.caption}</figcaption></figure>`).join('')}
+          ${slides.map((s,i)=>`<figure class="xp-curtain-slide xp-carousel-slide ${s.cls}" data-index="${i}" style="--portrait-bg:url(\'${s.src}\')"><img src="${s.src}" alt="Dr Imo Enang personal portrait ${i+1}" ${i===0?'fetchpriority="high"':'loading="lazy"'} decoding="async"><figcaption class="xp-curtain-caption">${s.caption}</figcaption></figure>`).join('')}
         </div>
         <div class="xp-curtain-counter" aria-live="polite">01 / ${String(slides.length).padStart(2,'0')}</div>
       </div>
