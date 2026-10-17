@@ -20,24 +20,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download approved portraits
+      - name: Rebuild verified portrait files
         shell: bash
         run: |
           set -euo pipefail
-          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQDfTBObBlmPT5eEzvEzk3lcAV8CHgcG-vkHhpME_sO_ufg?download=1' -o /tmp/portrait-1.webp
-          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQB0pxuAsY-0RquV-tYM3P7mAe08QPPwJehIi6XxPReQIBw?download=1' -o /tmp/portrait-2.webp
-          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQAbSg_O7pb_Q7dpQepBYMjIAU3l17-Av0a-1Z4Wdrgugxk?download=1' -o /tmp/portrait-3.webp
-          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQAAECibnK1YToIXMBMwUIQUAS3GVF--yG8l7iEU5VWsp4M?download=1' -o /tmp/portrait-4.webp
-          printf '%s  %s\n' \
-            '894b35ba1e0f861524df6feb2830d873faf87af3bcb2f91fa4d4bec9de074618' '/tmp/portrait-1.webp' \
-            '7e22afa7fc48070fd99806341d7ccafd7a70bf71032d6d037272719273b64008' '/tmp/portrait-2.webp' \
-            'd3e8418ef37e2a94e10f2d709cc0669cb907e8cd740acb0995d6e02343410996' '/tmp/portrait-3.webp' \
-            'aef6adf9c20cc4e851794fe0cea5dc330c6735c1fa2fd8254518329dc7b1d322' '/tmp/portrait-4.webp' | sha256sum -c -
           mkdir -p assets
-          mv /tmp/portrait-1.webp assets/personal-portrait-1.webp
-          mv /tmp/portrait-2.webp assets/personal-portrait-2.webp
-          mv /tmp/portrait-3.webp assets/personal-portrait-3.webp
-          mv /tmp/portrait-4.webp assets/personal-portrait-4.webp
+          for n in 1 2 3 4; do
+            cat .galleryfix/p${n}-* > /tmp/p${n}.b64
+            base64 -d /tmp/p${n}.b64 > assets/personal-portrait-${n}.webp
+          done
+          printf '%s  %s\n' \
+            '894b35ba1e0f861524df6feb2830d873faf87af3bcb2f91fa4d4bec9de074618' 'assets/personal-portrait-1.webp' \
+            '7e22afa7fc48070fd99806341d7ccafd7a70bf71032d6d037272719273b64008' 'assets/personal-portrait-2.webp' \
+            'd3e8418ef37e2a94e10f2d709cc0669cb907e8cd740acb0995d6e02343410996' 'assets/personal-portrait-3.webp' \
+            'aef6adf9c20cc4e851794fe0cea5dc330c6735c1fa2fd8254518329dc7b1d322' 'assets/personal-portrait-4.webp' | sha256sum -c -
+          file assets/personal-portrait-*.webp
 
       - name: Update gallery markup and layout
         shell: bash
@@ -76,8 +73,7 @@ jobs:
               tag = tag[:-1] + f' loading="eager" width="{w}" height="{h}">'
               s = s[:match.start()] + tag + s[match.end():]
 
-          style = '''
-          <style id="approved-portrait-layout">
+          style = '''<style id="approved-portrait-layout">
           #personal-moments .xp-personal-finale-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:30px!important;align-items:start!important}
           #personal-moments .xp-story-pair{display:contents!important}
           #personal-moments .xp-story-pair-about figure:first-child{grid-column:1/-1!important}
@@ -85,16 +81,17 @@ jobs:
           #personal-moments .xp-story-photo{margin:0!important;min-width:0!important}
           #personal-moments .xp-story-photo img{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;filter:none!important;opacity:1!important;background:transparent!important}
           @media(max-width:800px){#personal-moments .xp-personal-finale-grid{grid-template-columns:1fr!important}#personal-moments .xp-story-photo{grid-column:1!important}}
-          </style>
-          '''
+          </style>'''
           if 'id="approved-portrait-layout"' in s:
-              s = re.sub(r'<style id="approved-portrait-layout">.*?</style>', style.strip(), s, flags=re.S)
+              s = re.sub(r'<style id="approved-portrait-layout">.*?</style>', style, s, flags=re.S)
           else:
               s = s.replace('</head>', style + '\n</head>', 1)
 
           p.write_text(s, encoding='utf-8')
           PY
           rm -f assets/test.txt assets/personal-portrait-1.b64
+          rm -rf .galleryfix
+          rm -f .github/workflows/fix-approved-portraits.yml
 
       - name: Commit corrected gallery
         shell: bash
@@ -103,5 +100,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'Fix approved personal portrait gallery assets'
+          git commit -m 'Repair approved portrait gallery'
           git push
