@@ -8,8 +8,7 @@
     const slides=[
       {src:'/assets/personal-portrait-1.webp',caption:'THE PERSON BEHIND THE WORK',cls:'is-wide'},
       {src:'/assets/personal-portrait-2.webp',caption:'QUIET CONFIDENCE',cls:'is-chain'},
-      {src:'/assets/personal-portrait-3.webp',caption:'STYLE & PRESENCE',cls:''},
-      {src:'/assets/personal-blue-shirt.jpeg',caption:'BETWEEN THE MOMENTS',cls:''}
+      {src:'/assets/personal-portrait-3.webp',caption:'STYLE & PRESENCE',cls:''}
     ];
 
     const gallery=document.createElement('div');
@@ -60,7 +59,7 @@
     stage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY},{passive:true});
     stage.addEventListener('touchend',e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){dx<0?next():prev()}},{passive:true});
 
-    const start=()=>{if(reduce||timer||!visible)return;timer=window.setInterval(next,4600)};
+    const start=()=>{if(reduce||timer||!visible)return;timer=window.setInterval(next,2200)};
     const stop=()=>{if(timer){window.clearInterval(timer);timer=null}};
     gallery.addEventListener('mouseenter',stop);
     gallery.addEventListener('mouseleave',start);
