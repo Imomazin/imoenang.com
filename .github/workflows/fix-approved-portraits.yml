@@ -1,0 +1,107 @@
+name: Fix approved portrait gallery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-approved-portraits.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-gallery:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download approved portraits
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQDfTBObBlmPT5eEzvEzk3lcAV8CHgcG-vkHhpME_sO_ufg?download=1' -o /tmp/portrait-1.webp
+          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQB0pxuAsY-0RquV-tYM3P7mAe08QPPwJehIi6XxPReQIBw?download=1' -o /tmp/portrait-2.webp
+          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQAbSg_O7pb_Q7dpQepBYMjIAU3l17-Av0a-1Z4Wdrgugxk?download=1' -o /tmp/portrait-3.webp
+          curl -L --fail --retry 3 -A 'Mozilla/5.0' 'https://uplandartsdevelopmentcic292-my.sharepoint.com/:u:/g/personal/imo_weareupland_com/IQAAECibnK1YToIXMBMwUIQUAS3GVF--yG8l7iEU5VWsp4M?download=1' -o /tmp/portrait-4.webp
+          printf '%s  %s\n' \
+            '894b35ba1e0f861524df6feb2830d873faf87af3bcb2f91fa4d4bec9de074618' '/tmp/portrait-1.webp' \
+            '7e22afa7fc48070fd99806341d7ccafd7a70bf71032d6d037272719273b64008' '/tmp/portrait-2.webp' \
+            'd3e8418ef37e2a94e10f2d709cc0669cb907e8cd740acb0995d6e02343410996' '/tmp/portrait-3.webp' \
+            'aef6adf9c20cc4e851794fe0cea5dc330c6735c1fa2fd8254518329dc7b1d322' '/tmp/portrait-4.webp' | sha256sum -c -
+          mkdir -p assets
+          mv /tmp/portrait-1.webp assets/personal-portrait-1.webp
+          mv /tmp/portrait-2.webp assets/personal-portrait-2.webp
+          mv /tmp/portrait-3.webp assets/personal-portrait-3.webp
+          mv /tmp/portrait-4.webp assets/personal-portrait-4.webp
+
+      - name: Update gallery markup and layout
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          replacements = {
+              '/assets/photo-white-shirt.jpg': '/assets/personal-portrait-1.webp',
+              '/assets/photo-outdoor.jpg': '/assets/personal-portrait-2.webp',
+              '/assets/photo-black-turtleneck.jpg': '/assets/personal-portrait-3.webp',
+              '/assets/photo-sunglasses.jpg': '/assets/personal-portrait-4.webp',
+          }
+          for old, new in replacements.items():
+              s = s.replace(old, new)
+
+          dimensions = {
+              '/assets/personal-portrait-1.webp': ('1536', '467'),
+              '/assets/personal-portrait-2.webp': ('528', '552'),
+              '/assets/personal-portrait-3.webp': ('510', '552'),
+              '/assets/personal-portrait-4.webp': ('484', '552'),
+          }
+          for src, (w, h) in dimensions.items():
+              pattern = rf'<img([^>]*?)src="{re.escape(src)}"([^>]*)>'
+              match = re.search(pattern, s)
+              if not match:
+                  raise SystemExit(f'Missing image tag for {src}')
+              tag = match.group(0)
+              tag = re.sub(r'\sloading="[^"]*"', '', tag)
+              tag = re.sub(r'\swidth="[^"]*"', '', tag)
+              tag = re.sub(r'\sheight="[^"]*"', '', tag)
+              tag = tag[:-1] + f' loading="eager" width="{w}" height="{h}">'
+              s = s[:match.start()] + tag + s[match.end():]
+
+          style = '''
+          <style id="approved-portrait-layout">
+          #personal-moments .xp-personal-finale-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:30px!important;align-items:start!important}
+          #personal-moments .xp-story-pair{display:contents!important}
+          #personal-moments .xp-story-pair-about figure:first-child{grid-column:1/-1!important}
+          #personal-moments .xp-story-pair-scholarship figure{grid-column:1/-1!important}
+          #personal-moments .xp-story-photo{margin:0!important;min-width:0!important}
+          #personal-moments .xp-story-photo img{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;filter:none!important;opacity:1!important;background:transparent!important}
+          @media(max-width:800px){#personal-moments .xp-personal-finale-grid{grid-template-columns:1fr!important}#personal-moments .xp-story-photo{grid-column:1!important}}
+          </style>
+          '''
+          if 'id="approved-portrait-layout"' in s:
+              s = re.sub(r'<style id="approved-portrait-layout">.*?</style>', style.strip(), s, flags=re.S)
+          else:
+              s = s.replace('</head>', style + '\n</head>', 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+          rm -f assets/test.txt assets/personal-portrait-1.b64
+
+      - name: Commit corrected gallery
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Fix approved personal portrait gallery assets'
+          git push
