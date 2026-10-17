@@ -1,0 +1,55 @@
+name: Install personal curtain gallery
+
+on:
+  push:
+    branches: [personal-curtain-update]
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: personal-curtain-update
+          fetch-depth: 0
+      - name: Import the two approved photographs exactly as supplied
+        env:
+          FASHION_URL: "https://sdmntprnortheu.oaiusercontent.com/files/00000000-29c8-81f4-b8f3-3f8636b7130b/raw?se=2026-10-17T09%3A50%3A17Z&sp=r&sv=2026-02-06&sr=b&scid=e71539b2-4e41-53c3-9815-99ed13c31a43&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-17T09%3A38%3A54Z&ske=2026-10-18T09%3A38%3A54Z&sks=b&skv=2026-02-06&sig=VaXUbmYP8SLGhHsGfPBy9HGtMIiSUUzRWkUHg9ermMQ%3D"
+          BLUE_URL: "https://sdmntprnortheu.oaiusercontent.com/files/00000000-ad28-81f4-a40a-e58e65e0dafc/raw?se=2026-10-17T09%3A50%3A21Z&sp=r&sv=2026-02-06&sr=b&scid=a59c4a2c-18d7-503a-816a-32ed25acba86&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-17T06%3A51%3A23Z&ske=2026-10-18T06%3A51%3A23Z&sks=b&skv=2026-02-06&sig=SZi1/%2BDZeALyJeu6igeNc0SEIh1/1jpjyf4%2BlnPDdVo%3D"
+        run: |
+          curl -L --fail --retry 3 "$FASHION_URL" -o assets/personal-fashion.jpeg
+          curl -L --fail --retry 3 "$BLUE_URL" -o assets/personal-blue-shirt.jpeg
+          echo "5b97509d29a3a3aebaf2b531d5932b58c765191c99a7cad2a2eb68d3773c500e  assets/personal-fashion.jpeg" | sha256sum -c -
+          echo "55d82943a23d00e7ad05308bc0a8063d864a8cb37fb0ad23c242184cc434291a  assets/personal-blue-shirt.jpeg" | sha256sum -c -
+      - name: Install curtain gallery assets on the homepage
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          css='<link rel="stylesheet" href="/personal-curtain.css?v=20261017c">'
+          js='<script src="/personal-curtain.js?v=20261017c" defer></script>'
+          if '/personal-curtain.css' not in s:
+              s=s.replace('</head>', css+'\n</head>')
+          if '/personal-curtain.js' not in s:
+              s=s.replace('</body>', js+'\n</body>')
+          p.write_text(s)
+          PY
+          grep -q '/personal-curtain.css?v=20261017c' index.html
+          grep -q '/personal-curtain.js?v=20261017c' index.html
+          test -s assets/personal-fashion.jpeg
+          test -s assets/personal-blue-shirt.jpeg
+      - name: Commit gallery update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/personal-fashion.jpeg assets/personal-blue-shirt.jpeg
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Install animated personal curtain gallery"
+            git push origin HEAD:personal-curtain-update
+          fi
