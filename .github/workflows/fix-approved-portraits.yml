@@ -42,19 +42,15 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
-
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
           replacements = {
               '/assets/photo-white-shirt.jpg': '/assets/personal-portrait-1.webp',
               '/assets/photo-outdoor.jpg': '/assets/personal-portrait-2.webp',
               '/assets/photo-black-turtleneck.jpg': '/assets/personal-portrait-3.webp',
               '/assets/photo-sunglasses.jpg': '/assets/personal-portrait-4.webp',
           }
-          for old, new in replacements.items():
-              s = s.replace(old, new)
-
+          for old, new in replacements.items(): s = s.replace(old, new)
           dimensions = {
               '/assets/personal-portrait-1.webp': ('1536', '467'),
               '/assets/personal-portrait-2.webp': ('528', '552'),
@@ -64,15 +60,13 @@ jobs:
           for src, (w, h) in dimensions.items():
               pattern = rf'<img([^>]*?)src="{re.escape(src)}"([^>]*)>'
               match = re.search(pattern, s)
-              if not match:
-                  raise SystemExit(f'Missing image tag for {src}')
+              if not match: raise SystemExit(f'Missing image tag for {src}')
               tag = match.group(0)
               tag = re.sub(r'\sloading="[^"]*"', '', tag)
               tag = re.sub(r'\swidth="[^"]*"', '', tag)
               tag = re.sub(r'\sheight="[^"]*"', '', tag)
               tag = tag[:-1] + f' loading="eager" width="{w}" height="{h}">'
               s = s[:match.start()] + tag + s[match.end():]
-
           style = '''<style id="approved-portrait-layout">
           #personal-moments .xp-personal-finale-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:30px!important;align-items:start!important}
           #personal-moments .xp-story-pair{display:contents!important}
@@ -86,7 +80,6 @@ jobs:
               s = re.sub(r'<style id="approved-portrait-layout">.*?</style>', style, s, flags=re.S)
           else:
               s = s.replace('</head>', style + '\n</head>', 1)
-
           p.write_text(s, encoding='utf-8')
           PY
           rm -f assets/test.txt assets/personal-portrait-1.b64
@@ -102,3 +95,5 @@ jobs:
           git add -A
           git commit -m 'Repair approved portrait gallery'
           git push
+
+# retry 2026-10-17
