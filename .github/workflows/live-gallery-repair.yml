@@ -1,0 +1,92 @@
+name: Repair live portrait gallery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/live-gallery-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download exact approved portraits
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl -L --fail 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-3bd0-81f4-a913-67f8a3eb89b3/raw?se=2026-10-17T08%3A53%3A02Z&sp=r&sv=2026-02-06&sr=b&scid=627a796f-5e81-58df-a31b-b8ee1c61ffb0&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-17T07%3A31%3A19Z&ske=2026-10-18T07%3A31%3A19Z&sks=b&skv=2026-02-06&sig=QRbdqUgVR/%2BTr7F9Uiifz0l5OPMe0YEe8K8kdJaYf6s%3D' -o assets/personal-portrait-1.webp
+          curl -L --fail 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-54b4-81f4-8bb0-df974d11bf0e/raw?se=2026-10-17T08%3A53%3A06Z&sp=r&sv=2026-02-06&sr=b&scid=1b97f365-844f-5ac5-b3a0-28108956bb69&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-17T06%3A17%3A40Z&ske=2026-10-18T06%3A17%3A40Z&sks=b&skv=2026-02-06&sig=CemHZRSf/K0KrHXmSvUNJzU1OerpmUerVVi8CbEQrbM%3D' -o assets/personal-portrait-2.webp
+          curl -L --fail 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-7d08-81f4-be4c-b1fb1ff12ee5/raw?se=2026-10-17T08%3A53%3A10Z&sp=r&sv=2026-02-06&sr=b&scid=b0c14f05-5673-5fc7-8a9a-cbc8c19daa2e&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-16T20%3A44%3A58Z&ske=2026-10-17T20%3A44%3A58Z&sks=b&skv=2026-02-06&sig=E%2BV7kcCEm9prgdckzM4sZXd%2B4JG6c9/d6NhY4uIgVgQ%3D' -o assets/personal-portrait-3.webp
+          curl -L --fail 'https://sdmntpritalynorth.oaiusercontent.com/files/00000000-72a4-8246-bc84-8958b2af1b32/raw?se=2026-10-17T08%3A53%3A14Z&sp=r&sv=2026-02-06&sr=b&scid=e771566b-d1fd-5a43-b55c-1a5fb29d4342&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-17T07%3A31%3A20Z&ske=2026-10-18T07%3A31%3A20Z&sks=b&skv=2026-02-06&sig=G0dROytR5dwr82quTIwNVKh%2BG2NlTKa8OKXLLzQ74yQ%3D' -o assets/personal-portrait-4.webp
+          printf '%s  %s\n' \
+            '894b35ba1e0f861524df6feb2830d873faf87af3bcb2f91fa4d4bec9de074618' 'assets/personal-portrait-1.webp' \
+            '7e22afa7fc48070fd99806341d7ccafd7a70bf71032d6d037272719273b64008' 'assets/personal-portrait-2.webp' \
+            'd3e8418ef37e2a94e10f2d709cc0669cb907e8cd740acb0995d6e02343410996' 'assets/personal-portrait-3.webp' \
+            'aef6adf9c20cc4e851794fe0cea5dc330c6735c1fa2fd8254518329dc7b1d322' 'assets/personal-portrait-4.webp' | sha256sum -c -
+
+      - name: Update homepage gallery
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          repl={
+            '/assets/photo-white-shirt.jpg':'/assets/personal-portrait-1.webp',
+            '/assets/photo-outdoor.jpg':'/assets/personal-portrait-2.webp',
+            '/assets/photo-black-turtleneck.jpg':'/assets/personal-portrait-3.webp',
+            '/assets/photo-sunglasses.jpg':'/assets/personal-portrait-4.webp',
+          }
+          for a,b in repl.items(): s=s.replace(a,b)
+          dims={
+            '/assets/personal-portrait-1.webp':('1536','467'),
+            '/assets/personal-portrait-2.webp':('528','552'),
+            '/assets/personal-portrait-3.webp':('510','552'),
+            '/assets/personal-portrait-4.webp':('484','552'),
+          }
+          for src,(w,h) in dims.items():
+            pat=rf'<img([^>]*?)src="{re.escape(src)}"([^>]*)>'
+            m=re.search(pat,s)
+            if not m: raise SystemExit(f'Missing {src}')
+            tag=m.group(0)
+            tag=re.sub(r'\sloading="[^"]*"','',tag)
+            tag=re.sub(r'\swidth="[^"]*"','',tag)
+            tag=re.sub(r'\sheight="[^"]*"','',tag)
+            tag=tag[:-1]+f' loading="eager" width="{w}" height="{h}" decoding="async">'
+            s=s[:m.start()]+tag+s[m.end():]
+          style='''<style id="approved-portrait-layout">
+          #personal-moments .xp-personal-finale-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:30px!important;align-items:start!important}
+          #personal-moments .xp-story-pair{display:contents!important}
+          #personal-moments .xp-story-pair-about figure:first-child{grid-column:1/-1!important}
+          #personal-moments .xp-story-pair-scholarship figure{grid-column:1/-1!important}
+          #personal-moments .xp-story-photo{margin:0!important;min-width:0!important;background:transparent!important}
+          #personal-moments .xp-story-photo img{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;filter:none!important;opacity:1!important;background:transparent!important}
+          @media(max-width:800px){#personal-moments .xp-personal-finale-grid{grid-template-columns:1fr!important}#personal-moments .xp-story-photo{grid-column:1!important}}
+          </style>'''
+          if 'id="approved-portrait-layout"' in s:
+            s=re.sub(r'<style id="approved-portrait-layout">.*?</style>',style,s,flags=re.S)
+          else:
+            s=s.replace('</head>',style+'\n</head>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Commit repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .galleryfix
+          rm -f .github/workflows/fix-approved-portraits.yml .github/workflows/repair-gallery-v2.yml .github/workflows/live-gallery-repair.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Fix live personal portrait gallery'
+          git push
