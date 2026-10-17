@@ -6,6 +6,7 @@
     if(!oldGrid) return;
 
     const slides=[
+      {src:'https://drive.google.com/thumbnail?id=17eGaixMPfBzVrDk2XTJWxQzjAu58CXUs&sz=w1600',caption:'PERSONAL MOMENTS',cls:''},
       {src:'/assets/personal-portrait-1.webp',caption:'THE PERSON BEHIND THE WORK',cls:'is-wide'},
       {src:'/assets/personal-portrait-2.webp',caption:'QUIET CONFIDENCE',cls:'is-chain'},
       {src:'/assets/personal-portrait-3.webp',caption:'STYLE & PRESENCE',cls:''}
