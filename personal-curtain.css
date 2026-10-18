@@ -85,3 +85,51 @@
 
 #personal-moments .xp-single-frame-gallery .xp-curtain-caption{bottom:82px}
 #personal-moments .xp-single-frame-gallery .xp-carousel-slide{padding-bottom:112px}
+
+
+/* Two editorial photo pairs. All four approved photographs stay uncropped. */
+#personal-moments .xp-paired-frame-gallery .xp-carousel-stage{
+  height:clamp(470px,55vw,740px);
+}
+#personal-moments .xp-paired-frame-gallery .xp-carousel-slide.xp-pair-slide{
+  padding:38px clamp(18px,4vw,64px) 86px;
+  display:flex;align-items:center;justify-content:center;
+}
+#personal-moments .xp-paired-frame-gallery .xp-portrait-pair{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;column-gap:clamp(16px,3vw,54px);
+  width:min(100%,1140px);height:100%;min-height:0;margin-inline:auto;
+}
+#personal-moments .xp-paired-frame-gallery .xp-pair-card{
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  gap:15px;min-width:0;min-height:0;height:100%;margin:0;
+}
+#personal-moments .xp-paired-frame-gallery .xp-pair-image{
+  display:flex;flex:1;min-height:0;width:100%;align-items:center;justify-content:center;
+}
+#personal-moments .xp-paired-frame-gallery .xp-pair-image img,
+#personal-moments .xp-paired-frame-gallery .xp-pair-card.is-wide img{
+  display:block;width:auto;height:auto;max-width:100%;max-height:100%;
+  object-fit:contain;object-position:center;filter:none;opacity:1;
+}
+#personal-moments .xp-paired-frame-gallery .xp-pair-card .xp-curtain-caption{
+  position:static;left:auto;bottom:auto;transform:none;
+  display:block;flex:none;margin:0;min-height:2.8em;padding:0;
+  max-width:100%;width:auto;text-align:center;line-height:1.45;
+  font-size:9px;letter-spacing:.13em;white-space:normal;
+}
+@media(max-width:760px){
+  #personal-moments .xp-paired-frame-gallery .xp-carousel-stage{
+    height:clamp(350px,95vw,600px);
+  }
+  #personal-moments .xp-paired-frame-gallery .xp-carousel-slide.xp-pair-slide{
+    padding:30px 12px 72px;
+  }
+  #personal-moments .xp-paired-frame-gallery .xp-portrait-pair{
+    grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;
+  }
+  #personal-moments .xp-paired-frame-gallery .xp-pair-card{gap:10px}
+  #personal-moments .xp-paired-frame-gallery .xp-pair-card .xp-curtain-caption{
+    font-size:7px;letter-spacing:.08em;min-height:3.1em;
+  }
+}
