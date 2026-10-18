@@ -6,11 +6,43 @@
     if(!oldGrid) return;
 
     const slides=[
-      {src:'https://drive.google.com/thumbnail?id=17eGaixMPfBzVrDk2XTJWxQzjAu58CXUs&sz=w1600',caption:'PERSONAL MOMENTS',cls:'is-portrait'},
-      {src:'/assets/personal-portrait-1.webp',caption:'THE PERSON BEHIND THE WORK',cls:'is-wide'},
-      {src:'/assets/personal-portrait-2.webp',caption:'QUIET CONFIDENCE',cls:'is-portrait'},
-      {src:'/assets/personal-portrait-3.webp',caption:'STYLE & PRESENCE',cls:'is-portrait'}
-    ];
+  {
+    "src": "/assets/personal-evening.webp",
+    "small": "/assets/personal-evening-small.webp",
+    "width": 1086,
+    "height": 1448,
+    "caption": "AN EVENING BETWEEN CHAPTERS",
+    "alt": "Dr Imo Enang in a black tuxedo beside an illuminated courtyard and reflecting pool",
+    "cls": "is-portrait"
+  },
+  {
+    "src": "/assets/personal-lounge.webp",
+    "small": "/assets/personal-lounge-small.webp",
+    "width": 1086,
+    "height": 1448,
+    "caption": "A MOMENT TO REFLECT",
+    "alt": "Dr Imo Enang seated in a blue shirt and waistcoat in an executive lounge",
+    "cls": "is-portrait"
+  },
+  {
+    "src": "/assets/personal-suit.webp",
+    "small": "/assets/personal-suit-small.webp",
+    "width": 1440,
+    "height": 1080,
+    "caption": "PERSONAL STYLE",
+    "alt": "Dr Imo Enang taking a mirror portrait in a black suit",
+    "cls": "is-wide"
+  },
+  {
+    "src": "/assets/personal-smile.webp",
+    "small": "/assets/personal-smile-small.webp",
+    "width": 1086,
+    "height": 1448,
+    "caption": "THE PERSON BEHIND THE WORK",
+    "alt": "Dr Imo Enang smiling in a blue shirt and navy waistcoat",
+    "cls": "is-portrait"
+  }
+];
 
     const gallery=document.createElement('div');
     gallery.className='xp-curtain-gallery xp-carousel-gallery xp-single-frame-gallery';
@@ -18,7 +50,7 @@
     gallery.innerHTML=`
       <div class="xp-curtain-stage xp-carousel-stage">
         <div class="xp-carousel-track">
-          ${slides.map((s,i)=>`<figure class="xp-curtain-slide xp-carousel-slide ${s.cls} ${i===0?'is-active':''}" data-index="${i}" aria-hidden="${i===0?'false':'true'}"><img src="${s.src}" alt="Dr Imo Enang personal portrait ${i+1}" ${i===0?'fetchpriority="high"':'loading="lazy"'} decoding="async"><figcaption class="xp-curtain-caption">${s.caption}</figcaption></figure>`).join('')}
+          ${slides.map((s,i)=>`<figure class="xp-curtain-slide xp-carousel-slide ${s.cls} ${i===0?'is-active':''}" data-index="${i}" aria-hidden="${i===0?'false':'true'}"><img src="${s.src}" srcset="${s.small} 600w, ${s.src} ${s.width}w" sizes="(max-width: 760px) 88vw, 900px" width="${s.width}" height="${s.height}" alt="${s.alt}" loading="lazy" decoding="async"><figcaption class="xp-curtain-caption">${s.caption}</figcaption></figure>`).join('')}
         </div>
         <div class="xp-curtain-counter" aria-live="off">01 / ${String(slides.length).padStart(2,'0')}</div>
         <div class="xp-curtain-controls">
