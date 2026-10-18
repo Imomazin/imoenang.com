@@ -18,10 +18,10 @@
   {
     "src": "/assets/personal-lounge.webp",
     "small": "/assets/personal-lounge-small.webp",
-    "width": 1086,
-    "height": 1448,
+    "width": 1200,
+    "height": 1600,
     "caption": "A MOMENT TO REFLECT",
-    "alt": "Dr Imo Enang seated in a blue shirt and waistcoat in an executive lounge",
+    "alt": "Dr Imo Enang seated in a blue shirt and waistcoat beside the glass walls of a modern interior",
     "cls": "is-portrait"
   },
   {
