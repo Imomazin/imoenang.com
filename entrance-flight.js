@@ -191,8 +191,6 @@ window.imoEntranceFlight=({intro,complete})=>{
  function tick(now){
    if(done)return;if(!start)start=now;
    // Draw uses seconds, not a normalized 0..1 fraction. Last beat must actually run.
-   const debug=new URLSearchParams(location.search).get('entranceStill');
-   if(debug!==null){const seconds=Number(debug);if(Number.isFinite(seconds)&&seconds>=0&&seconds<=duration/1000){try{draw(seconds)}catch(_){finish()}return}}
    const elapsed=Math.min(duration/1000,(now-start)/1000);
    try{draw(elapsed)}catch(_){finish();return}
    if(elapsed>=duration/1000){finish();return}frame=requestAnimationFrame(tick);
