@@ -61,6 +61,7 @@ window.imoEntranceFlight=({intro,complete})=>{
    body.classList.remove('xp-flight-active');
    ['--flight-scale','--flight-lift','--flight-reveal','--flight-header-height'].forEach(x=>body.style.removeProperty(x));
    intro.classList.remove('xp-flight-running');intro.removeAttribute('aria-busy');
+   body.classList.add('imomazin-kindled');
    art=null;complete();
  }
  function key(e){if(e.key==='Escape'){e.preventDefault();finish()}}
@@ -72,7 +73,7 @@ window.imoEntranceFlight=({intro,complete})=>{
  body.style.setProperty('--flight-header-height',(document.querySelector('.xp-header')?.getBoundingClientRect().height||88)+'px');
  body.classList.add('xp-flight-active');
  intro.classList.add('xp-flight-running');intro.dataset.flightDuration=String(duration);
- intro.dataset.flightStyle='living-emblem';intro.setAttribute('aria-busy','true');
+ intro.dataset.flightStyle='living-emblem-eternal-flame';intro.setAttribute('aria-busy','true');
  if(!ctx){finish();return finish}
  prepare();
  function flame(x,y,size,a,time){
@@ -134,7 +135,7 @@ window.imoEntranceFlight=({intro,complete})=>{
    // The fire is gathered from beneath the figure and guided into the actual flag.
    if(t>=.52&&t<=1.57){
      const rise=smooth((t-.61)/.31),journey=smooth((t-1.02)/.45);
-     const low=scene(572,790),hand=scene(680,624),flag=scene(1058,186);
+     const low=scene(572,790),hand=scene(680,624),flag=scene(1165,135);
      let fx=low.x+(hand.x-low.x)*rise,fy=low.y+(hand.y-low.y)*rise;
      if(journey>0){
        const q=journey;
@@ -151,17 +152,23 @@ window.imoEntranceFlight=({intro,complete})=>{
          ctx.stroke();ctx.restore();
        }
      }
-     const appear=smooth((t-.52)/.12)*(1-smooth((t-1.48)/.10));
+     const appear=smooth((t-.52)/.12)*(1-smooth((t-1.44)/.14));
      flame(fx,fy,Math.max(18,width*.069)*(1-.35*journey),appear,t);
    }
    // A single localized flash crowns the unaltered original flag.
    if(t>=1.44&&t<1.77){
-     const impact=smooth((t-1.44)/.09)*(1-smooth((t-1.58)/.19)),point=scene(1042,178);
+     const impact=smooth((t-1.44)/.09)*(1-smooth((t-1.58)/.19)),point=scene(1165,135);
      ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=impact*.75;
      const g=ctx.createRadialGradient(point.x,point.y,0,point.x,point.y,width*.18);
      g.addColorStop(0,'rgba(255,245,185,.92)');g.addColorStop(.15,'rgba(255,210,99,.37)');
      g.addColorStop(1,'rgba(255,176,66,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(point.x,point.y,width*.18,0,Math.PI*2);ctx.fill();
      ctx.restore();
+   }
+   // The newly gathered fire becomes the enduring, restrained signature of the flag.
+   if(t>=1.48){
+     const kindle=smooth((t-1.48)/.18);
+     const tip=scene(1165,135),size=Math.max(11,width*.028);
+     flame(tip.x,tip.y-size*.5,size,kindle*.88,1.7);
    }
    // A small reflective sweep gives the finished metallic signature its final weight.
    if(t>=1.54&&t<1.79){
