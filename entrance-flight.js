@@ -181,12 +181,8 @@ window.imoEntranceFlight=({intro,complete})=>{
    body.style.setProperty('--flight-lift',String((1-out((t-1.75)/.25))*1.6)+'vh');
    body.style.setProperty('--flight-reveal',String(transition));
  }
- const heldFrame=Number(new URLSearchParams(location.search).get('entranceStill'));
- const hold=location.search.includes('entranceStill=')&&Number.isFinite(heldFrame)&&heldFrame>=0&&heldFrame<=2;
  function tick(now){
-   if(done)return;
-   if(hold){try{draw(heldFrame)}catch(_){finish()}return}
-   if(!start)start=now;
+   if(done)return;if(!start)start=now;
    const t=clamp((now-start)/duration);
    try{draw(t)}catch(_){finish();return}
    if(t>=1){finish();return}frame=requestAnimationFrame(tick);
