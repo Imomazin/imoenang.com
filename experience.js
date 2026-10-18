@@ -1,6 +1,45 @@
 /* One progressive motion and interaction system. */
 (()=>{'use strict';const root=document.documentElement,body=document.body,nativeReduce=matchMedia('(prefers-reduced-motion: reduce)'),reduce={get matches(){return nativeReduce.matches||new URLSearchParams(location.search).get('motion')==='reduce'},addEventListener:(...args)=>nativeReduce.addEventListener(...args)},fine=matchMedia('(pointer:fine)'),q=(s,n=document)=>n.querySelector(s),qa=(s,n=document)=>[...n.querySelectorAll(s)];const motion=()=>!reduce.matches;root.dataset.motion=reduce.matches?'reduce':'full';let frame=0;const state={lcp:0,cls:0,longTasks:0,shifts:[]};try{new PerformanceObserver(list=>{for(const e of list.getEntries())state.lcp=Math.round(e.startTime);root.dataset.metrics=JSON.stringify(state)}).observe({type:'largest-contentful-paint',buffered:true});new PerformanceObserver(list=>{for(const e of list.getEntries())if(!e.hadRecentInput){state.cls+=e.value;if(state.shifts.length<6)state.shifts.push({value:e.value,nodes:e.sources?.map(s=>({tag:s.node?.tagName,class:s.node?.className,previous:{x:s.previousRect.x,y:s.previousRect.y,w:s.previousRect.width,h:s.previousRect.height},current:{x:s.currentRect.x,y:s.currentRect.y,w:s.currentRect.width,h:s.currentRect.height}}))})};root.dataset.metrics=JSON.stringify(state)}).observe({type:'layout-shift',buffered:true});new PerformanceObserver(list=>{state.longTasks+=list.getEntries().length;root.dataset.metrics=JSON.stringify(state)}).observe({type:'longtask',buffered:true})}catch{}
 const theme=q('#xp-theme');const applyTheme=()=>{const dark=root.dataset.theme!=='light';theme?.setAttribute('aria-label',dark?'Switch to light theme':'Switch to dark theme');theme?.setAttribute('aria-pressed',String(!dark));if(theme)theme.innerHTML=dark?'☀ <span>LIGHT</span>':'☾ <span>DARK</span>'};try{root.dataset.theme=localStorage.getItem('imo-theme')==='light'?'light':'dark'}catch{root.dataset.theme='dark'}applyTheme();theme?.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('imo-theme',root.dataset.theme)}catch{}applyTheme()});
+// Permanent illuminated IMOMAZIN emblem across the website.
+const flameStyle=document.createElement('style');
+flameStyle.textContent=String.raw`
+.xp-logo{position:relative;overflow:visible}
+.imomazin-brand-flame{position:absolute;display:block;pointer-events:none;z-index:2;transform:translate(-50%,-91%);aspect-ratio:25/29;isolation:isolate;filter:drop-shadow(0 0 3px rgba(255,194,87,.55))}
+.imomazin-brand-flame svg{display:block;width:100%;height:100%;overflow:visible}
+body.xp-entry-locked .imomazin-brand-flame{opacity:0}
+body.xp-flight-active .imomazin-brand-flame{opacity:var(--flight-reveal,0)}
+body.imomazin-kindled .imomazin-brand-flame{animation:imomazin-ember-settle 1.1s ease-out both}
+@keyframes imomazin-ember-settle{0%{opacity:.3;filter:drop-shadow(0 0 9px rgba(255,209,100,1))}35%{opacity:1;filter:drop-shadow(0 0 7px rgba(255,203,85,.95))}100%{opacity:1;filter:drop-shadow(0 0 3px rgba(255,194,87,.55))}}
+@media(prefers-reduced-motion:reduce){body.imomazin-kindled .imomazin-brand-flame{animation:none}}
+html[data-motion=reduce] body.imomazin-kindled .imomazin-brand-flame{animation:none}
+`;
+document.head.append(flameStyle);
+function placeFlameMarks(){
+  qa('.xp-logo img[src*="imomazin-dark.png"]').forEach(img=>{
+    const holder=img.closest('.xp-logo');if(!holder)return;
+    let ember=holder.querySelector('.imomazin-brand-flame');
+    if(!ember){
+      ember=document.createElement('span');ember.className='imomazin-brand-flame';ember.setAttribute('aria-hidden','true');
+      ember.innerHTML='<svg viewBox="0 0 25 29" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><defs><linearGradient id="imomazinEmberGradient" x1="0" y1="1" x2=".35" y2="0"><stop stop-color="#dc8a24"/><stop offset=".47" stop-color="#ffbb51"/><stop offset=".88" stop-color="#ffe6a3"/><stop offset="1" stop-color="#fff5d2"/></linearGradient></defs><path d="M10.8 27.2C5.6 24.4 5.1 19.9 8.1 15.8c1.5-2.5 1.4-4.8 1.5-7.3 3.4 2.6 4.8 5 4.5 8.1 2.6-3.4 3.1-7.2 1.4-12.7 7.3 7.5 9.6 15.5 5 20.2-2.1 2.4-5.2 3.8-9.5 3.7Z" fill="url(#imomazinEmberGradient)"/><path d="M12.3 26.5c-3.5-2.4-1.9-6 .2-8.4 1.7 2.9 3.6 4.2 2.6 8.4-.7 1.9-2 2.1-2.8 0Z" fill="#fff3c4" opacity=".9"/></svg>';
+      holder.append(ember);
+    }
+    const place=()=>{
+      const ir=img.getBoundingClientRect(),pr=holder.getBoundingClientRect();
+      if(!ir.width||!ir.height)return;
+      const nw=img.naturalWidth||1672,nh=img.naturalHeight||941;
+      const s=Math.min(ir.width/nw,ir.height/nh),dw=nw*s,dh=nh*s;
+      const x=ir.left-pr.left+(ir.width-dw)/2+1165*s;
+      const y=ir.top-pr.top+(ir.height-dh)/2+135*s;
+      ember.style.left=x+'px';ember.style.top=y+'px';
+      ember.style.width=Math.max(7,Math.min(20,dw*.078))+'px';
+    };
+    if(img.complete&&img.naturalWidth)place();
+    else img.addEventListener('load',place,{once:true});
+  });
+}
+placeFlameMarks();
+addEventListener('resize',placeFlameMarks,{passive:true});
 const intro=q('#xp-cinema');if(intro){const enter=q('#xp-enter');if(location.hash||!motion()){intro.remove()}else{let entering=false;body.classList.add('xp-entry-locked');const behind=qa('body>header,body>main,body>footer');behind.forEach(el=>el.inert=true);enter.focus({preventScroll:true});const finish=()=>{intro.remove();body.classList.remove('xp-entry-locked','xp-flight-active');behind.forEach(el=>el.inert=false);window.scrollTo({top:0,behavior:'instant'});const heading=q('.xp-hero h1');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true})};enter.addEventListener('click',e=>{e.preventDefault();if(entering)return;entering=true;if(!motion()||!window.imoEntranceFlight){finish();return}window.imoEntranceFlight({intro,complete:finish})})}}
 const menu=q('#xp-menu'),nav=q('#xp-nav'),main=q('main');const setMenu=open=>{nav?.classList.toggle('open',open);nav?.toggleAttribute('inert',!open);nav?.setAttribute('aria-hidden',String(!open));menu?.setAttribute('aria-expanded',String(open));main?.toggleAttribute('inert',open);body.style.overflow=open?'hidden':'';if(open)q('a',nav)?.focus();else menu?.focus()};menu?.addEventListener('click',()=>setMenu(menu.getAttribute('aria-expanded')!=='true'));qa('a',nav).forEach(a=>a.addEventListener('click',()=>setMenu(false)));document.addEventListener('keydown',e=>{if(menu?.getAttribute('aria-expanded')==='true'){if(e.key==='Escape'){e.preventDefault();setMenu(false)}if(e.key==='Tab'){const items=[menu,...qa('a,button',nav)],first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}}});
 // Editorial type is revealed once; the content remains available without JavaScript.
