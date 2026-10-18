@@ -53,7 +53,7 @@ window.imoEntranceFlight=({intro,complete})=>{
    canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
    ctx?.setTransform(dpr,0,0,dpr,0,0);
  }
- function finish(){
+ function finish(natural=false){
    if(done)return;done=true;cancelAnimationFrame(frame);
    removeEventListener('resize',resize);document.removeEventListener('keydown',key);
    document.removeEventListener('visibilitychange',hidden);
@@ -62,7 +62,7 @@ window.imoEntranceFlight=({intro,complete})=>{
    ['--flight-scale','--flight-lift','--flight-reveal','--flight-header-height'].forEach(x=>body.style.removeProperty(x));
    intro.classList.remove('xp-flight-running');intro.removeAttribute('aria-busy');
    body.classList.add('imomazin-kindled');
-   art=null;complete();
+   art=null;complete({natural});
  }
  function key(e){if(e.key==='Escape'){e.preventDefault();finish()}}
  function hidden(){if(document.hidden)finish()}
@@ -184,8 +184,9 @@ window.imoEntranceFlight=({intro,complete})=>{
    // The completed kindled emblem is held visibly before the homepage reveal.
    ctx.save();ctx.globalAlpha=transition;ctx.fillStyle='#050e0a';ctx.fillRect(0,0,W,H);ctx.restore();
    canvas.style.opacity=String(visible);
-   body.style.setProperty('--flight-scale',String(.975+.025*out((t-2.19)/.36)));
-   body.style.setProperty('--flight-lift',String((1-out((t-2.19)/.36))*1.6)+'vh');
+   // Accelerate the finished emblem into a deliberate camera push: 44% -> 109% in the final 360ms.
+   body.style.setProperty('--flight-scale',String(.44+.65*out((t-2.19)/.36)));
+   body.style.setProperty('--flight-lift',String((1-out((t-2.19)/.36))*5.2)+'vh');
    body.style.setProperty('--flight-reveal',String(transition));
  }
  function tick(now){
@@ -193,7 +194,7 @@ window.imoEntranceFlight=({intro,complete})=>{
    // Draw uses seconds, not a normalized 0..1 fraction. Last beat must actually run.
    const elapsed=Math.min(duration/1000,(now-start)/1000);
    try{draw(elapsed)}catch(_){finish();return}
-   if(elapsed>=duration/1000){finish();return}frame=requestAnimationFrame(tick);
+   if(elapsed>=duration/1000){finish(true);return}frame=requestAnimationFrame(tick);
  }
  frame=requestAnimationFrame(tick);
  return finish;
