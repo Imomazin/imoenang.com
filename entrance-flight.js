@@ -66,7 +66,7 @@ window.imoEntranceFlight=({intro,complete})=>{
  }
  function key(e){if(e.key==='Escape'){e.preventDefault();finish()}}
  function hidden(){if(document.hidden)finish()}
- skip.addEventListener('click',finish);
+ skip.addEventListener('click',()=>finish());
  document.addEventListener('keydown',key);document.addEventListener('visibilitychange',hidden);
  addEventListener('resize',resize,{passive:true});
  resize();
