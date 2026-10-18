@@ -1,4 +1,4 @@
-/* Imomazin — 2.55-second cinematic descent, ascent, ignition and hero hold. Original artwork intact. */
+/* Imomazin - 2.55-second cinematic descent, ascent, ignition and hero hold. Original artwork intact. */
 (()=>{'use strict';
 window.imoEntranceFlight=({intro,complete})=>{
  const duration=2550,body=document.body,root=document.documentElement;

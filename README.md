@@ -1,4 +1,4 @@
-# Dr Imo Enang — Official Website
+# Dr Imo Enang - Official Website
 
 Canonical website: https://imoenang.com/
 
@@ -12,3 +12,4 @@ Key identity sources:
 - Greenwich Academic Literature Archive: https://gala.gre.ac.uk/id/user/13303
 - LinkedIn: https://uk.linkedin.com/in/dr-imo-enang
 - VivaLaVida (VLV): https://myvlv.com/
+
