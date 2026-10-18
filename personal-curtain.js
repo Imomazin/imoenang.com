@@ -34,8 +34,8 @@
     "cls": "is-wide"
   },
   {
-    "src": "/assets/personal-smile.webp",
-    "small": "/assets/personal-smile-small.webp",
+    "src": "/assets/personal-smile-approved.jpg",
+    "small": "/assets/personal-smile-approved.jpg",
     "width": 1086,
     "height": 1448,
     "caption": "THE PERSON BEHIND THE WORK",
