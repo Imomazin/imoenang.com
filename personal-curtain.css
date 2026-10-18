@@ -82,3 +82,6 @@
 .xp-seasonal-finish .xp-seasonal-kicker,.xp-seasonal-finish .xp-seasonal-sign{display:block;line-height:1.6}
 #personal-moments .xp-single-frame-gallery .xp-curtain-caption{max-width:calc(100% - 32px);white-space:normal;text-align:center;line-height:1.5}
 @media(max-width:800px){.xp-seasonal-finish{grid-template-columns:1fr;gap:38px}.xp-seasonal-finish .xp-seasonal-photo{max-width:620px;margin-inline:auto}.xp-seasonal-finish .xp-seasonal-inner{max-width:620px}.xp-seasonal-finish h2{font-size:clamp(40px,8.5vw,64px)}}
+
+#personal-moments .xp-single-frame-gallery .xp-curtain-caption{bottom:82px}
+#personal-moments .xp-single-frame-gallery .xp-carousel-slide{padding-bottom:112px}
