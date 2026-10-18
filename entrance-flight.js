@@ -184,8 +184,8 @@ window.imoEntranceFlight=({intro,complete})=>{
    // The completed kindled emblem is held visibly before the homepage reveal.
    ctx.save();ctx.globalAlpha=transition;ctx.fillStyle='#050e0a';ctx.fillRect(0,0,W,H);ctx.restore();
    canvas.style.opacity=String(visible);
-   // Accelerate the finished emblem into a deliberate camera push: 44% -> 109% in the final 360ms.
-   body.style.setProperty('--flight-scale',String(.44+.65*out((t-2.19)/.36)));
+   // Handoff: accelerate the completed emblem into a 148% landing view; the hero pulls back for one second.
+   body.style.setProperty('--flight-scale',String(.44+1.04*out((t-2.19)/.36)));
    body.style.setProperty('--flight-lift',String((1-out((t-2.19)/.36))*5.2)+'vh');
    body.style.setProperty('--flight-reveal',String(transition));
  }
