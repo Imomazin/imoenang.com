@@ -1,7 +1,7 @@
-/* Imomazin — two-second living emblem. The approved artwork remains unchanged. */
+/* Imomazin — 2.55-second cinematic descent, ascent, ignition and hero hold. Original artwork intact. */
 (()=>{'use strict';
 window.imoEntranceFlight=({intro,complete})=>{
- const duration=2000,body=document.body,root=document.documentElement;
+ const duration=2550,body=document.body,root=document.documentElement;
  const clamp=x=>Math.max(0,Math.min(1,x));
  const smooth=x=>{x=clamp(x);return x*x*(3-2*x)};
  const out=x=>1-Math.pow(1-clamp(x),3);
@@ -116,15 +116,15 @@ window.imoEntranceFlight=({intro,complete})=>{
  }
  function draw(t){
    prepare();ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
-   const transition=smooth((t-1.75)/.25),visible=1-transition;
+   const transition=smooth((t-2.19)/.36),visible=1-transition;
    const width=Math.min(W*.90,H*1.60,1060),s=width/nativeW;
    const height=nativeH*s,ox=(W-width)/2,oy=H*.45-height/2;
    ctx.fillStyle='#050e0a';ctx.fillRect(0,0,W,H);
    const pool=ctx.createRadialGradient(W*.5,H*.44,0,W*.5,H*.44,Math.max(W,H)*.65);
    pool.addColorStop(0,'rgba(25,61,44,.58)');pool.addColorStop(.6,'rgba(8,25,17,.38)');
    pool.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=pool;ctx.fillRect(0,0,W,H);
-   const detach=smooth((t-.20)/.40),returning=smooth((t-1.04)/.38),move=detach*(1-returning);
-   const stable=t<.23||t>=1.47;
+   const detach=smooth((t-.12)/.40),returning=smooth((t-1.09)/.67),move=detach*(1-returning);
+   const stable=t<.12||t>=1.76;
    ctx.save();ctx.globalAlpha=visible;
    if(stable||!art){if(logo.complete&&logo.naturalWidth)ctx.drawImage(logo,ox,oy,width,height)}
    else{
@@ -133,9 +133,9 @@ window.imoEntranceFlight=({intro,complete})=>{
    }
    const scene=(x,y)=>({x:ox+x*s,y:oy+y*s});
    // The fire is gathered from beneath the figure and guided into the actual flag.
-   if(t>=.52&&t<=1.57){
-     const rise=smooth((t-.61)/.31),journey=smooth((t-1.02)/.45);
-     const low=scene(572,790),hand=scene(680,624),flag=scene(1165,135);
+   if(t>=.43&&t<=1.98){
+     const rise=smooth((t-.48)/.34),journey=smooth((t-1.09)/.67);
+     const low=scene(550,815),hand=scene(590,650),flag=scene(1165,135);
      let fx=low.x+(hand.x-low.x)*rise,fy=low.y+(hand.y-low.y)*rise;
      if(journey>0){
        const q=journey;
@@ -152,12 +152,12 @@ window.imoEntranceFlight=({intro,complete})=>{
          ctx.stroke();ctx.restore();
        }
      }
-     const appear=smooth((t-.52)/.12)*(1-smooth((t-1.44)/.14));
+     const appear=smooth((t-.43)/.16)*(1-smooth((t-1.75)/.22));
      flame(fx,fy,Math.max(18,width*.069)*(1-.35*journey),appear,t);
    }
    // A single localized flash crowns the unaltered original flag.
-   if(t>=1.44&&t<1.77){
-     const impact=smooth((t-1.44)/.09)*(1-smooth((t-1.58)/.19)),point=scene(1165,135);
+   if(t>=1.76&&t<2.14){
+     const impact=smooth((t-1.76)/.08)*(1-smooth((t-1.86)/.26)),point=scene(1165,135);
      ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=impact*.75;
      const g=ctx.createRadialGradient(point.x,point.y,0,point.x,point.y,width*.18);
      g.addColorStop(0,'rgba(255,245,185,.92)');g.addColorStop(.15,'rgba(255,210,99,.37)');
@@ -165,14 +165,14 @@ window.imoEntranceFlight=({intro,complete})=>{
      ctx.restore();
    }
    // The newly gathered fire becomes the enduring, restrained signature of the flag.
-   if(t>=1.48){
-     const kindle=smooth((t-1.48)/.18);
+   if(t>=1.77){
+     const kindle=smooth((t-1.77)/.20);
      const tip=scene(1165,135),size=Math.max(11,width*.028);
      flame(tip.x,tip.y-size*.5,size,kindle*.88,1.7);
    }
    // A small reflective sweep gives the finished metallic signature its final weight.
-   if(t>=1.54&&t<1.79){
-     const q=smooth((t-1.54)/.22);
+   if(t>=1.86&&t<2.14){
+     const q=smooth((t-1.86)/.28);
      ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=(1-q)*.32;
      ctx.translate(ox+width*(.2+q*.65),oy+height*.66);
      ctx.rotate(-.25);const ray=ctx.createLinearGradient(-width*.05,0,width*.05,0);
@@ -181,18 +181,21 @@ window.imoEntranceFlight=({intro,complete})=>{
      ctx.fillStyle=ray;ctx.fillRect(-width*.05,-height*.05,width*.1,height*.26);ctx.restore();
    }
    ctx.restore();
-   // Reveal the ready homepage during the final quarter-second.
+   // The completed kindled emblem is held visibly before the homepage reveal.
    ctx.save();ctx.globalAlpha=transition;ctx.fillStyle='#050e0a';ctx.fillRect(0,0,W,H);ctx.restore();
    canvas.style.opacity=String(visible);
-   body.style.setProperty('--flight-scale',String(.975+.025*out((t-1.75)/.25)));
-   body.style.setProperty('--flight-lift',String((1-out((t-1.75)/.25))*1.6)+'vh');
+   body.style.setProperty('--flight-scale',String(.975+.025*out((t-2.19)/.36)));
+   body.style.setProperty('--flight-lift',String((1-out((t-2.19)/.36))*1.6)+'vh');
    body.style.setProperty('--flight-reveal',String(transition));
  }
  function tick(now){
    if(done)return;if(!start)start=now;
-   const t=clamp((now-start)/duration);
-   try{draw(t)}catch(_){finish();return}
-   if(t>=1){finish();return}frame=requestAnimationFrame(tick);
+   // Draw uses seconds, not a normalized 0..1 fraction. Last beat must actually run.
+   const debug=new URLSearchParams(location.search).get('entranceStill');
+   if(debug!==null){const seconds=Number(debug);if(Number.isFinite(seconds)&&seconds>=0&&seconds<=duration/1000){try{draw(seconds)}catch(_){finish()}return}}
+   const elapsed=Math.min(duration/1000,(now-start)/1000);
+   try{draw(elapsed)}catch(_){finish();return}
+   if(elapsed>=duration/1000){finish();return}frame=requestAnimationFrame(tick);
  }
  frame=requestAnimationFrame(tick);
  return finish;
