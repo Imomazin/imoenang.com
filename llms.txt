@@ -6,6 +6,7 @@
 - [Homepage](https://imoenang.com/): Overview of scholarship, leadership and enterprise
 - [About](https://imoenang.com/about): Biography, academic and corporate career, education and professional profiles
 - [Scholarship](https://imoenang.com/scholarship): Books, research publications and academic evidence
+- [Research insights](https://imoenang.com/research-insights): Evidence-led explanations of four published research themes, including methods and limitations
 - [Practice](https://imoenang.com/practice): Executive education, strategy consulting and professional engagements
 - [VLV Group](https://imoenang.com/vlv-group): Parent-group relationship and member businesses
 - [Recognition](https://imoenang.com/recognition): Professional recognition, qualifications and awards
