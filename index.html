@@ -155,6 +155,42 @@
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/manifest.webmanifest">
+
+<!-- Google Analytics: loaded only after the visitor opts in. -->
+<style id="analytics-consent-style">
+#analytics-consent{position:fixed;z-index:9999;bottom:16px;left:16px;right:16px;max-width:580px;padding:18px 20px;background:var(--xp-card,#14241c);color:var(--xp-fg,#f4f2ec);border:1px solid var(--xp-line,#334239);box-shadow:0 12px 45px #0008;font:14px/1.5 Arial,sans-serif}
+#analytics-consent[hidden]{display:none!important}#analytics-consent p{margin:0 0 12px}#analytics-consent button{border:1px solid var(--xp-line,#334239);background:transparent;color:inherit;padding:10px 14px;margin:0 10px 0 0;min-height:44px}#analytics-consent button[data-analytics-accept]{background:var(--xp-gold,#c3a36a);color:#0b100e;border-color:var(--xp-gold,#c3a36a)}
+</style>
+<script id="analytics-consent-controller">
+(function(){
+  'use strict';
+  var key='imo-analytics-consent',measurement='G-9XKQMT6VT6';
+  function enableAnalytics(){
+    if(window.__imoAnalyticsLoaded)return;
+    window.__imoAnalyticsLoaded=true;
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=function(){window.dataLayer.push(arguments)};
+    window.gtag('js',new Date());
+    window.gtag('config',measurement,{anonymize_ip:true});
+    var script=document.createElement('script');script.async=true;
+    script.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(measurement);
+    document.head.appendChild(script);
+  }
+  function init(){
+    var consent=null;
+    try{consent=localStorage.getItem(key)}catch(e){}
+    if(consent==='accepted'){enableAnalytics();return}
+    if(consent==='declined')return;
+    var panel=document.createElement('aside');panel.id='analytics-consent';
+    panel.setAttribute('role','region');panel.setAttribute('aria-label','Optional website analytics');
+    panel.innerHTML='<p>May I use optional Google Analytics cookies to understand how visitors use this website? You can decline and continue browsing normally.</p><button type="button" data-analytics-accept>Accept analytics</button><button type="button" data-analytics-decline>Decline</button>';
+    document.body.appendChild(panel);
+    panel.querySelector('[data-analytics-accept]').addEventListener('click',function(){try{localStorage.setItem(key,'accepted')}catch(e){}panel.remove();enableAnalytics()});
+    panel.querySelector('[data-analytics-decline]').addEventListener('click',function(){try{localStorage.setItem(key,'declined')}catch(e){}panel.remove()});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </head><body class="experience"><a class="skip-link" href="#world">Skip to content</a><div id="xp-cinema" class="xp-cinema" aria-label="Enter the world of Dr Imo Enang"><div class="xp-entry-orbit" aria-hidden="true"></div><div class="xp-cinema-inner"><img class="xp-entry-logo" src="/assets/imomazin-dark.png" alt="I'momazin" width="1672" height="941"><span class="xp-cinema-index">THE WORLD OF DR IMO ENANG</span><div class="xp-cinema-word">Ideas become<br><span>possibilities.</span></div><p class="xp-entry-copy">Scholarship. Strategy. Enterprise.<br>Research, teaching and executive practice.</p><a class="xp-enter" href="#world" id="xp-enter">ENTER THE EXPERIENCE <span aria-hidden="true">↗</span></a></div></div><noscript><style>.xp-cinema{display:none}</style></noscript><div class="xp-progress" aria-hidden="true"><span id="xp-progress-bar"></span></div><div class="xp-cursor" id="xp-cursor" aria-hidden="true"><span>EXPLORE ↗</span></div>
 <header class="xp-header"><a href="/" class="xp-brand" aria-label="Dr Imo Enang home"><span class="xp-logo"><img src="/assets/imomazin-dark.png" alt="I'momazin gold logo" decoding="async" width="1672" height="941"></span><span class="xp-brand-copy">DR IMO ENANG<small>STRATEGY / SCHOLARSHIP / IMPACT</small></span></a><div class="xp-header-right"><span class="xp-edition">EST. IN IDEAS. BUILT FOR IMPACT.</span><button id="xp-theme" class="xp-theme" type="button" aria-label="Toggle light and dark theme">◐ <span>THEME</span></button><button id="xp-menu" class="xp-menu" type="button" aria-expanded="false" aria-controls="xp-nav">MENU <span>☰</span></button></div></header>
 <div id="xp-page-transition" class="xp-page-transition" aria-hidden="true"><span>THE WORLD OF IMO ENANG</span></div><nav id="xp-nav" class="xp-nav" aria-label="Main navigation" inert="" aria-hidden="true"><div class="xp-nav-inner"><p>EXPLORE THE WORLD OF IMO ENANG</p><a href="/about">01 <span>About</span> ↗</a><a href="/scholarship">02 <span>Scholarship</span> ↗</a><a href="/practice">03 <span>Practice</span> ↗</a><a href="/vlv-group">04 <span>VLV Group</span> ↗</a><a href="/recognition">05 <span>Recognition</span> ↗</a><a href="#connect">06 <span>Connect</span> ↗</a></div></nav>
